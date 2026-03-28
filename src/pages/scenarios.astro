@@ -1,0 +1,607 @@
+---
+import Layout from '../layouts/Layout.astro';
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : rawBase + '/';
+
+const scenarios = [
+  {
+    id: 1,
+    title: "COPD Exacerbation",
+    vignette: "A 68-year-old male with a history of COPD presents with increased dyspnea and productive cough. He appears anxious and is using accessory muscles to breathe. His SpO₂ is 84% on room air.",
+    abg: { ph: 7.28, pco2: 62, hco3: 28, pao2: 54 },
+    diagnosis: "Partially Compensated Respiratory Acidosis",
+    category: "Respiratory Acidosis",
+    difficulty: "Intermediate",
+    explanation: "The pH is low (acidosis). The PaCO₂ is elevated (62 mmHg), indicating hypoventilation and CO₂ retention — this is the respiratory cause. The HCO₃⁻ is slightly elevated (28), showing the kidneys are attempting to compensate by retaining bicarbonate. Since pH is still outside normal range but HCO₃⁻ has moved, this is Partially Compensated Respiratory Acidosis.",
+    keyPoints: [
+      "CO₂ retention in COPD is common — always check baseline CO₂ for known 'CO₂ retainers'",
+      "The elevated bicarbonate reflects chronic renal compensation",
+      "Use cautious O₂ therapy — high O₂ can suppress hypoxic drive in severe COPD",
+      "BiPAP (non-invasive ventilation) may be needed to reduce CO₂"
+    ]
+  },
+  {
+    id: 2,
+    title: "Diabetic Ketoacidosis (DKA)",
+    vignette: "A 22-year-old type 1 diabetic woman is brought in by EMS. She is confused, breathing rapidly and deeply (Kussmaul breathing). Blood glucose is 680 mg/dL. She has been vomiting for 2 days.",
+    abg: { ph: 7.18, pco2: 22, hco3: 8, pao2: 96 },
+    diagnosis: "Partially Compensated Metabolic Acidosis",
+    category: "Metabolic Acidosis",
+    difficulty: "Advanced",
+    explanation: "The pH is severely low (7.18 — acidosis). The HCO₃⁻ is critically low (8 mEq/L), confirming metabolic acidosis as the primary problem. The PaCO₂ is also low (22 mmHg), which represents respiratory compensation — the Kussmaul breathing is the lungs trying to blow off CO₂ to raise the pH. Since pH is still outside normal range, this is Partially Compensated Metabolic Acidosis.",
+    keyPoints: [
+      "Kussmaul breathing (rapid, deep) is the respiratory compensation for severe metabolic acidosis",
+      "Expected PaCO₂ compensation: Winter's formula = (1.5 × HCO₃⁻) + 8 ± 2 → ~20 mmHg (close to 22)",
+      "Treat with IV fluids, insulin drip, and electrolyte replacement (watch K+!)",
+      "Critical danger: As insulin is given, K+ shifts back into cells — monitor for hypokalemia"
+    ]
+  },
+  {
+    id: 3,
+    title: "Anxiety-Induced Hyperventilation",
+    vignette: "A 28-year-old nurse has a panic attack before a stressful clinical exam. She reports tingling in her hands and around her mouth, and feels lightheaded. Her respiratory rate is 28 breaths/minute.",
+    abg: { ph: 7.56, pco2: 24, hco3: 22, pao2: 102 },
+    diagnosis: "Uncompensated Respiratory Alkalosis",
+    category: "Respiratory Alkalosis",
+    difficulty: "Beginner",
+    explanation: "The pH is elevated (7.56 — alkalosis). The PaCO₂ is low (24 mmHg) due to rapid breathing (hyperventilation), which is blowing off CO₂. Less CO₂ → less carbonic acid → higher pH. The HCO₃⁻ is normal (22), meaning the kidneys have not yet begun to compensate — this is Uncompensated Respiratory Alkalosis.",
+    keyPoints: [
+      "Hyperventilation reduces CO₂, creating respiratory alkalosis",
+      "The tingling (paresthesias) and muscle cramps are from reduced ionized calcium (alkalosis binds Ca²⁺ to albumin)",
+      "Treatment: coached slow breathing, reassurance, treat underlying anxiety",
+      "Rebreathing into a paper bag can temporarily raise CO₂ — use cautiously"
+    ]
+  },
+  {
+    id: 4,
+    title: "Nasogastric Suction Loss",
+    vignette: "A 55-year-old post-operative gastric bypass patient has had continuous NG suction for 3 days. She reports muscle weakness and abdominal cramping. Her potassium is 3.0 mEq/L.",
+    abg: { ph: 7.52, pco2: 44, hco3: 34, pao2: 90 },
+    diagnosis: "Uncompensated Metabolic Alkalosis",
+    category: "Metabolic Alkalosis",
+    difficulty: "Intermediate",
+    explanation: "The pH is elevated (7.52 — alkalosis). The HCO₃⁻ is high (34 mEq/L), confirming metabolic alkalosis — loss of gastric acid (HCl) via NG suction depletes H⁺ ions and leaves relative bicarbonate excess. The PaCO₂ is normal (44), meaning the respiratory system has not yet compensated — this is Uncompensated Metabolic Alkalosis.",
+    keyPoints: [
+      "NG suctioning removes HCl from the stomach, causing H⁺ loss and relative HCO₃⁻ excess",
+      "Hypokalemia (K+ 3.0) accompanies and worsens metabolic alkalosis",
+      "Treatment: replace potassium and chloride (IV KCl), consider H2 blockers to reduce acid loss",
+      "Avoid overuse of NG suction and monitor electrolytes daily"
+    ]
+  },
+  {
+    id: 5,
+    title: "Aspirin Overdose (Salicylate Toxicity)",
+    vignette: "A 17-year-old is brought to the ED after intentionally ingesting a bottle of aspirin. He is breathing rapidly and complaining of ringing in his ears (tinnitus) and nausea.",
+    abg: { ph: 7.48, pco2: 26, hco3: 19, pao2: 97 },
+    diagnosis: "Mixed Respiratory Alkalosis and Metabolic Acidosis",
+    category: "Mixed Disorder",
+    difficulty: "Advanced",
+    explanation: "This is a classic mixed disorder. Initially, salicylates stimulate the respiratory center → respiratory alkalosis (CO₂ low, pH high). Simultaneously, salicylic acid accumulates → metabolic acidosis (HCO₃⁻ low). Here, the pH is slightly alkalotic but HCO₃⁻ is low — reflecting both processes. Both CO₂ and HCO₃⁻ are low, which is not consistent with simple compensation for either disorder alone.",
+    keyPoints: [
+      "Classic biphasic: early respiratory alkalosis, followed by metabolic acidosis",
+      "Both CO₂ and HCO₃⁻ low = mixed disorder (not compensation alone)",
+      "Treatment: sodium bicarbonate IV (alkalizes urine for renal excretion of salicylate), hemodialysis for severe cases",
+      "Monitor for hypoglycemia, hypokalemia, and pulmonary edema"
+    ]
+  },
+  {
+    id: 6,
+    title: "Post-Cardiac Arrest",
+    vignette: "A 70-year-old male is brought in after a witnessed cardiac arrest with 8 minutes of CPR before ROSC. He is intubated on mechanical ventilation. Skin is cool and mottled.",
+    abg: { ph: 7.12, pco2: 55, hco3: 17, pao2: 80 },
+    diagnosis: "Mixed Respiratory and Metabolic Acidosis",
+    category: "Mixed Disorder",
+    difficulty: "Advanced",
+    explanation: "This is a combined metabolic and respiratory acidosis. The pH is severely low (7.12). The CO₂ is elevated (55) due to respiratory failure/inadequate ventilation during arrest. The HCO₃⁻ is also low (17) from lactic acidosis due to tissue hypoperfusion during the arrest. Both point toward acidosis — there is no compensatory alkalosis.",
+    keyPoints: [
+      "Post-arrest mixed acidosis is common due to combined hypoventilation and lactic acidosis",
+      "Optimize ventilator settings to correct respiratory component first",
+      "Bicarbonate therapy is controversial — treat underlying cause (restore perfusion)",
+      "Monitor lactate levels as a guide to perfusion restoration",
+      "Target SpO₂ 94–98% and normocapnia (CO₂ 35–45) post-ROSC"
+    ]
+  },
+  {
+    id: 7,
+    title: "Renal Failure (Uremia)",
+    vignette: "A 60-year-old with end-stage renal disease missed his last two dialysis sessions. He presents with fatigue, nausea, and shortness of breath. His BUN is 95 and creatinine is 12.4.",
+    abg: { ph: 7.26, pco2: 30, hco3: 13, pao2: 86 },
+    diagnosis: "Partially Compensated Metabolic Acidosis",
+    category: "Metabolic Acidosis",
+    difficulty: "Intermediate",
+    explanation: "The pH is low (7.26 — acidosis). The HCO₃⁻ is significantly low (13 mEq/L) — the failing kidneys cannot regenerate bicarbonate or excrete hydrogen ions. The PaCO₂ is low (30 mmHg), showing respiratory compensation (increased breathing rate). Since pH is still acidotic, it is Partially Compensated Metabolic Acidosis.",
+    keyPoints: [
+      "Kidneys in failure cannot excrete H+ or regenerate HCO₃⁻, causing metabolic acidosis",
+      "Treat with emergent dialysis to correct metabolic derangements",
+      "Sodium bicarbonate may be given as a bridge to dialysis",
+      "Hyperkalemia is a co-existing life-threatening problem — obtain an ECG"
+    ]
+  },
+  {
+    id: 8,
+    title: "Pulmonary Embolism",
+    vignette: "A 45-year-old woman presents with sudden onset pleuritic chest pain and shortness of breath 5 days post total knee replacement. Her heart rate is 118. CT pulmonary angiography confirms a PE.",
+    abg: { ph: 7.49, pco2: 30, hco3: 23, pao2: 68 },
+    diagnosis: "Uncompensated Respiratory Alkalosis",
+    category: "Respiratory Alkalosis",
+    difficulty: "Intermediate",
+    explanation: "The pH is elevated (7.49 — alkalosis). The PaCO₂ is low (30 mmHg) because the patient is hyperventilating in response to pain, anxiety, and hypoxia from the embolism. The HCO₃⁻ is normal (23), meaning no renal compensation yet — this is Uncompensated Respiratory Alkalosis. The PaO₂ of 68 confirms hypoxemia from V/Q mismatch.",
+    keyPoints: [
+      "PE causes V/Q mismatch → hypoxemia → reflex hyperventilation → respiratory alkalosis",
+      "Hypoxemia with respiratory alkalosis is a common ABG pattern in PE",
+      "Treatment: anticoagulation (heparin), thrombolytics for massive PE",
+      "Risk factors: Virchow's triad — stasis, hypercoagulability, vascular injury"
+    ]
+  },
+  {
+    id: 9,
+    title: "Chronic Compensated COPD",
+    vignette: "A 72-year-old lifelong smoker with known severe COPD is stable and followed in the pulmonary clinic. She has no acute complaints today.",
+    abg: { ph: 7.38, pco2: 58, hco3: 33, pao2: 62 },
+    diagnosis: "Fully Compensated Respiratory Acidosis",
+    category: "Respiratory Acidosis",
+    difficulty: "Intermediate",
+    explanation: "The pH is 7.38 — within normal range but on the acidotic side. The PaCO₂ is elevated (58 mmHg) due to chronic CO₂ retention from COPD. The HCO₃⁻ is elevated (33 mEq/L) — the kidneys have fully compensated by retaining bicarbonate to normalize pH. This is Fully Compensated Respiratory Acidosis. This is this patient's 'new normal'.",
+    keyPoints: [
+      "Chronic CO₂ retainers have a compensated baseline — acute exacerbations show acute-on-chronic changes",
+      "pH within normal range but both CO₂ and HCO₃⁻ abnormal = full compensation",
+      "Always compare to patient's baseline ABG — what is 'normal' for them?",
+      "Do NOT target normal CO₂ with mechanical ventilation — it can cause dangerous metabolic alkalosis"
+    ]
+  },
+  {
+    id: 10,
+    title: "Septic Shock",
+    vignette: "A 55-year-old male with a urinary tract infection develops fever (39.8°C), hypotension (BP 80/50), and confusion. Lactate is 6.2 mmol/L. He is on 4L/min nasal cannula.",
+    abg: { ph: 7.22, pco2: 28, hco3: 11, pao2: 76 },
+    diagnosis: "Partially Compensated Metabolic Acidosis",
+    category: "Metabolic Acidosis",
+    difficulty: "Advanced",
+    explanation: "The pH is critically low (7.22 — severe acidosis). The HCO₃⁻ is very low (11 mEq/L) due to lactic acidosis from poor tissue perfusion in septic shock. The PaCO₂ is low (28 mmHg) — the lungs are compensating by blowing off CO₂ (tachypnea). Because pH is still very low, this is Partially Compensated Metabolic Acidosis. The elevated lactate (6.2) confirms lactic acidosis.",
+    keyPoints: [
+      "Lactic acidosis from hypoperfusion is the metabolic cause in septic shock",
+      "Treat the cause: IV fluids (30 mL/kg bolus), vasopressors (norepinephrine), antibiotics within 1 hour",
+      "Serial lactate levels guide resuscitation — target <2 mmol/L",
+      "Respiratory compensation may exhaust — intubation/ventilation may be needed"
+    ]
+  },
+  {
+    id: 11,
+    title: "Opioid Overdose",
+    vignette: "A 35-year-old is found unresponsive in a public bathroom. Respirations are 4/minute and shallow. He has pinpoint pupils. Empty pill bottles (oxycodone) are found nearby.",
+    abg: { ph: 7.19, pco2: 72, hco3: 26, pao2: 48 },
+    diagnosis: "Uncompensated Respiratory Acidosis",
+    category: "Respiratory Acidosis",
+    difficulty: "Beginner",
+    explanation: "The pH is severely low (7.19 — severe acidosis). The PaCO₂ is critically elevated (72 mmHg) due to severe hypoventilation from opioid-induced respiratory depression. The HCO₃⁻ is normal (26) — the kidneys have not had time to compensate (this is acute). This is Uncompensated Respiratory Acidosis and a medical emergency.",
+    keyPoints: [
+      "Opioids suppress the respiratory drive → hypoventilation → CO₂ retention",
+      "Immediate intervention: Naloxone (Narcan) 0.4–2 mg IV/IM/intranasal",
+      "Prepare for bag-mask ventilation or intubation",
+      "PaO₂ of 48 = severe hypoxemia — administer high-flow O₂ immediately",
+      "Monitor for re-sedation after naloxone (short half-life vs. long-acting opioids)"
+    ]
+  },
+  {
+    id: 12,
+    title: "Pregnancy (Physiologic)",
+    vignette: "A 28-year-old woman at 32 weeks gestation presents for routine prenatal care. She feels well with no complaints. Her obstetrician orders an ABG to assess baseline pulmonary status.",
+    abg: { ph: 7.44, pco2: 30, hco3: 20, pao2: 101 },
+    diagnosis: "Fully Compensated Respiratory Alkalosis (Normal in Pregnancy)",
+    category: "Respiratory Alkalosis",
+    difficulty: "Beginner",
+    explanation: "Pregnancy causes a physiologic respiratory alkalosis. Progesterone stimulates the respiratory center → mild hyperventilation → lower PaCO₂ (30 mmHg). The kidneys compensate by excreting bicarbonate (HCO₃⁻ low at 20). pH is normal (7.44). This is Fully Compensated Respiratory Alkalosis and is NORMAL in pregnancy — this is important to recognize so you don't over-treat!",
+    keyPoints: [
+      "Progesterone in pregnancy stimulates the respiratory center → physiologic hyperventilation",
+      "Normal pregnancy ABG: pH 7.40–7.45, PaCO₂ 27–34, HCO₃⁻ 18–22",
+      "This is a fully compensated (physiologic) state — no treatment needed",
+      "Important: Know the normal ranges for pregnancy so you can identify true pathology"
+    ]
+  }
+];
+---
+
+<Layout title="Clinical Scenarios" description="Practice interpreting acid-base ABG scenarios with guided clinical cases.">
+  <div class="scenarios-page">
+    <div class="container">
+      <div class="page-header">
+        <h1>Clinical ABG Practice Scenarios</h1>
+        <p class="page-subtitle">
+          Work through these real-world clinical cases. Try to interpret each ABG yourself before
+          revealing the answer and explanation.
+        </p>
+        <div class="filter-row">
+          <button class="filter-btn active" data-filter="all">All Cases ({scenarios.length})</button>
+          <button class="filter-btn" data-filter="Beginner">Beginner</button>
+          <button class="filter-btn" data-filter="Intermediate">Intermediate</button>
+          <button class="filter-btn" data-filter="Advanced">Advanced</button>
+        </div>
+      </div>
+
+      <div class="scenarios-grid" id="scenarios-grid">
+        {scenarios.map(scenario => (
+          <div class="scenario-card" data-difficulty={scenario.difficulty} data-id={scenario.id}>
+            <div class="scenario-header">
+              <div class="sc-meta">
+                <span class={`difficulty-badge diff-${scenario.difficulty.toLowerCase()}`}>{scenario.difficulty}</span>
+                <span class={`category-badge cat-${scenario.category.toLowerCase().replace(/\s+/g, '-')}`}>{scenario.category}</span>
+              </div>
+              <h2 class="sc-title">Case {scenario.id}: {scenario.title}</h2>
+            </div>
+
+            <div class="scenario-body">
+              <div class="vignette">
+                <p>{scenario.vignette}</p>
+              </div>
+
+              <div class="abg-values-display">
+                <div class="abgv-item">
+                  <span class="abgv-label">pH</span>
+                  <span class="abgv-num">{scenario.abg.ph}</span>
+                  <span class={`abgv-status ${scenario.abg.ph < 7.35 ? 'av-low' : scenario.abg.ph > 7.45 ? 'av-high' : 'av-normal'}`}>
+                    {scenario.abg.ph < 7.35 ? 'Low' : scenario.abg.ph > 7.45 ? 'High' : 'Normal'}
+                  </span>
+                </div>
+                <div class="abgv-item">
+                  <span class="abgv-label">PaCO₂</span>
+                  <span class="abgv-num">{scenario.abg.pco2}</span>
+                  <span class={`abgv-status ${scenario.abg.pco2 > 45 ? 'av-high' : scenario.abg.pco2 < 35 ? 'av-low' : 'av-normal'}`}>
+                    {scenario.abg.pco2 > 45 ? 'High' : scenario.abg.pco2 < 35 ? 'Low' : 'Normal'}
+                  </span>
+                </div>
+                <div class="abgv-item">
+                  <span class="abgv-label">HCO₃⁻</span>
+                  <span class="abgv-num">{scenario.abg.hco3}</span>
+                  <span class={`abgv-status ${scenario.abg.hco3 < 22 ? 'av-low' : scenario.abg.hco3 > 26 ? 'av-high' : 'av-normal'}`}>
+                    {scenario.abg.hco3 < 22 ? 'Low' : scenario.abg.hco3 > 26 ? 'High' : 'Normal'}
+                  </span>
+                </div>
+                <div class="abgv-item">
+                  <span class="abgv-label">PaO₂</span>
+                  <span class="abgv-num">{scenario.abg.pao2}</span>
+                  <span class={`abgv-status ${scenario.abg.pao2 < 80 ? 'av-low' : 'av-normal'}`}>
+                    {scenario.abg.pao2 < 80 ? 'Low' : 'Normal'}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Guess panel -->
+              <div class="guess-panel" id={`guess-${scenario.id}`}>
+                <p class="guess-prompt">🤔 What is your interpretation?</p>
+                <button class="btn btn-primary reveal-btn" onclick={`revealAnswer(${scenario.id})`}>
+                  Reveal Answer & Explanation
+                </button>
+                <a href={`${base}interpreter?ph=${scenario.abg.ph}&pco2=${scenario.abg.pco2}&hco3=${scenario.abg.hco3}&pao2=${scenario.abg.pao2}`} class="btn btn-outline" target="_blank">
+                  Open in Interpreter
+                </a>
+              </div>
+
+              <!-- Answer panel (hidden) -->
+              <div class="answer-panel" id={`answer-${scenario.id}`} style="display:none">
+                <div class="answer-header">
+                  <strong>✓ Diagnosis:</strong>
+                  <span class="answer-diagnosis">{scenario.diagnosis}</span>
+                </div>
+                <div class="answer-explanation">
+                  <h4>Explanation</h4>
+                  <p>{scenario.explanation}</p>
+                </div>
+                <div class="answer-keypoints">
+                  <h4>🔑 Key Clinical Points</h4>
+                  <ul>
+                    {scenario.keyPoints.map(point => (
+                      <li>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+                <button class="btn btn-outline hide-btn" onclick={`hideAnswer(${scenario.id})`}>
+                  Hide Answer
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function revealAnswer(id: number): void {
+    const guess = document.getElementById(`guess-${id}`);
+    const answer = document.getElementById(`answer-${id}`);
+    if (guess) guess.style.display = 'none';
+    if (answer) answer.style.display = 'block';
+  }
+
+  function hideAnswer(id: number): void {
+    const guess = document.getElementById(`guess-${id}`);
+    const answer = document.getElementById(`answer-${id}`);
+    if (guess) guess.style.display = 'block';
+    if (answer) answer.style.display = 'none';
+  }
+
+  (window as any).revealAnswer = revealAnswer;
+  (window as any).hideAnswer = hideAnswer;
+
+  // Filtering
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('.scenario-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter ?? 'all';
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.difficulty === filter) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .scenarios-page {
+    padding: 2rem 0 4rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    max-width: 680px;
+    margin: 0 auto 1.5rem;
+    font-size: 1.05rem;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 2px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .scenario-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .scenario-header {
+    background: var(--color-primary-light);
+    border-bottom: 1px solid var(--color-border);
+    padding: 1rem 1.25rem;
+  }
+
+  .sc-meta {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .difficulty-badge, .category-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .diff-beginner { background: #e8f5e9; color: #2e7d32; }
+  .diff-intermediate { background: #fff3e0; color: #e65100; }
+  .diff-advanced { background: #fde8e8; color: #c0392b; }
+
+  .cat-respiratory-acidosis { background: #fde8e8; color: #c0392b; }
+  .cat-respiratory-alkalosis { background: #e8f5e9; color: #2e7d32; }
+  .cat-metabolic-acidosis { background: #fff3e0; color: #e65100; }
+  .cat-metabolic-alkalosis { background: #ede7f6; color: #5e35b1; }
+  .cat-mixed-disorder { background: #f5f5f5; color: #555; }
+
+  .sc-title {
+    font-size: 1.1rem;
+    color: var(--color-primary-dark);
+    margin: 0;
+  }
+
+  .scenario-body {
+    padding: 1.25rem;
+  }
+
+  .vignette {
+    background: #f9f9f9;
+    border-left: 3px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-bottom: 1rem;
+    font-size: 0.93rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .vignette p { margin: 0; }
+
+  .abg-values-display {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .abgv-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .abgv-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+
+  .abgv-num {
+    font-size: 1.3rem;
+    font-weight: 800;
+    font-family: monospace;
+    color: var(--color-text);
+  }
+
+  .abgv-status {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.1rem 0.3rem;
+    border-radius: 999px;
+  }
+
+  .av-low { background: #fde8e8; color: #c0392b; }
+  .av-high { background: #e8f5e9; color: #2e7d32; }
+  .av-normal { background: #e8f4f8; color: #1a6b8a; }
+
+  .guess-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--color-primary-light);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+
+  .guess-prompt {
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    font-size: 1rem;
+  }
+
+  .guess-panel .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Answer panel */
+  .answer-panel {
+    border: 1px solid var(--color-secondary);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .answer-header {
+    background: var(--color-secondary);
+    color: #fff;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .answer-diagnosis {
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+
+  .answer-explanation,
+  .answer-keypoints {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .answer-explanation h4,
+  .answer-keypoints h4 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .answer-explanation p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+  }
+
+  .answer-keypoints ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .answer-keypoints li {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .answer-keypoints li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--color-secondary);
+    font-weight: 700;
+  }
+
+  .hide-btn {
+    margin: 0.75rem 1.25rem 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .scenarios-grid {
+      grid-template-columns: 1fr;
+    }
+    .abg-values-display {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
