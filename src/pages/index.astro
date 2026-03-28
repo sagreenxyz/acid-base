@@ -1,0 +1,688 @@
+---
+import Layout from '../layouts/Layout.astro';
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : rawBase + '/';
+---
+
+<Layout title="Home">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Acid-Base Imbalance<br/><span class="hero-highlight">Education for Nurses</span></h1>
+        <p class="hero-subtitle">
+          Master the interpretation of arterial blood gases (ABGs) with interactive step-by-step tools,
+          clinical scenarios, and a comprehensive reference guide.
+        </p>
+        <div class="hero-actions">
+          <a href={`${base}interpreter`} class="btn btn-primary">Start ABG Interpreter</a>
+          <a href={`${base}scenarios`} class="btn btn-outline-white">Practice Scenarios</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="abg-display">
+          <div class="abg-value ph">
+            <span class="abg-label">pH</span>
+            <span class="abg-number">7.32</span>
+            <span class="abg-status abg-low">↓ Low</span>
+          </div>
+          <div class="abg-value co2">
+            <span class="abg-label">PaCO₂</span>
+            <span class="abg-number">52</span>
+            <span class="abg-status abg-high">↑ High</span>
+          </div>
+          <div class="abg-value hco3">
+            <span class="abg-label">HCO₃⁻</span>
+            <span class="abg-number">24</span>
+            <span class="abg-status abg-normal">Normal</span>
+          </div>
+          <div class="abg-result">
+            <span>→ Respiratory Acidosis</span>
+            <span class="abg-compensate">Uncompensated</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Normal Values Quick Reference -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Normal ABG Values</h2>
+      <p class="section-subtitle">Memorize these reference ranges — they are the foundation of acid-base interpretation.</p>
+      <div class="values-grid">
+        <div class="value-card value-ph">
+          <div class="value-icon">pH</div>
+          <h3>pH</h3>
+          <div class="value-range">7.35 – 7.45</div>
+          <p>Measure of hydrogen ion concentration in arterial blood. Reflects the overall acid-base balance.</p>
+          <div class="value-extremes">
+            <span class="extreme-low">&lt;7.35 = Acidosis</span>
+            <span class="extreme-high">&gt;7.45 = Alkalosis</span>
+          </div>
+        </div>
+        <div class="value-card value-co2">
+          <div class="value-icon">CO₂</div>
+          <h3>PaCO₂</h3>
+          <div class="value-range">35 – 45 mmHg</div>
+          <p>Partial pressure of carbon dioxide. Controlled by the lungs — the respiratory component.</p>
+          <div class="value-extremes">
+            <span class="extreme-high">&gt;45 = Resp. Acidosis</span>
+            <span class="extreme-low">&lt;35 = Resp. Alkalosis</span>
+          </div>
+        </div>
+        <div class="value-card value-hco3">
+          <div class="value-icon">HCO₃</div>
+          <h3>HCO₃⁻</h3>
+          <div class="value-range">22 – 26 mEq/L</div>
+          <p>Bicarbonate ion concentration. Controlled by the kidneys — the metabolic component.</p>
+          <div class="value-extremes">
+            <span class="extreme-low">&lt;22 = Met. Acidosis</span>
+            <span class="extreme-high">&gt;26 = Met. Alkalosis</span>
+          </div>
+        </div>
+        <div class="value-card value-o2">
+          <div class="value-icon">O₂</div>
+          <h3>PaO₂</h3>
+          <div class="value-range">80 – 100 mmHg</div>
+          <p>Partial pressure of oxygen. While not directly used in acid-base interpretation, it provides clinical context.</p>
+          <div class="value-extremes">
+            <span class="extreme-low">&lt;80 = Hypoxemia</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-Step Method Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">The 4-Step ABG Interpretation Method</h2>
+      <p class="section-subtitle">Follow these steps every time to systematically interpret any ABG result.</p>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Evaluate the pH</h3>
+            <p>
+              Determine if the pH is <strong>acidic</strong> (&lt;7.35), <strong>alkalotic</strong> (&gt;7.45), or <strong>normal</strong> (7.35–7.45).
+              This tells you the overall direction of the imbalance.
+            </p>
+            <div class="step-tip">
+              <strong>💡 Tip:</strong> Even if pH is "normal," the patient may be compensated — check all values!
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Evaluate the PaCO₂ (Respiratory)</h3>
+            <p>
+              PaCO₂ has an <strong>inverse</strong> relationship to pH. High CO₂ → acidosis; Low CO₂ → alkalosis.
+              If PaCO₂ changes match the pH direction — it's a respiratory problem.
+            </p>
+            <div class="step-tip">
+              <strong>🔑 ROME:</strong> Respiratory = <strong>O</strong>pposite (pH ↓ / CO₂ ↑ or pH ↑ / CO₂ ↓)
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Evaluate the HCO₃⁻ (Metabolic)</h3>
+            <p>
+              HCO₃⁻ has a <strong>direct</strong> relationship to pH. Low HCO₃⁻ → acidosis; High HCO₃⁻ → alkalosis.
+              If HCO₃⁻ changes match the pH direction — it's a metabolic problem.
+            </p>
+            <div class="step-tip">
+              <strong>🔑 ROME:</strong> Metabolic = <strong>E</strong>qual (pH ↓ / HCO₃⁻ ↓ or pH ↑ / HCO₃⁻ ↑)
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Determine Compensation</h3>
+            <p>
+              If both PaCO₂ and HCO₃⁻ are abnormal, the body is compensating.
+              The component that <em>matches</em> the pH is the primary disorder; the other is compensating.
+            </p>
+            <div class="compensation-guide">
+              <div class="comp-item">
+                <strong>Uncompensated:</strong> Only one component is abnormal
+              </div>
+              <div class="comp-item">
+                <strong>Partially Compensated:</strong> Both abnormal, pH still outside normal range
+              </div>
+              <div class="comp-item">
+                <strong>Fully Compensated:</strong> Both abnormal, pH within normal range (but closer to affected side)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href={`${base}interpreter`} class="btn btn-primary">Practice with the Interactive Interpreter →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Six Disorders Overview -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">The Six Primary Acid-Base Disorders</h2>
+      <div class="disorders-grid">
+        <div class="disorder-card respiratory-acidosis">
+          <h3>Respiratory Acidosis</h3>
+          <div class="disorder-values">
+            <span class="dv-item dv-low">pH ↓</span>
+            <span class="dv-item dv-high">CO₂ ↑</span>
+            <span class="dv-item dv-normal">HCO₃ Nml*</span>
+          </div>
+          <p>Caused by hypoventilation (COPD, opioid overdose, sleep apnea).</p>
+        </div>
+        <div class="disorder-card respiratory-alkalosis">
+          <h3>Respiratory Alkalosis</h3>
+          <div class="disorder-values">
+            <span class="dv-item dv-high">pH ↑</span>
+            <span class="dv-item dv-low">CO₂ ↓</span>
+            <span class="dv-item dv-normal">HCO₃ Nml*</span>
+          </div>
+          <p>Caused by hyperventilation (anxiety, pain, fever, high altitude).</p>
+        </div>
+        <div class="disorder-card metabolic-acidosis">
+          <h3>Metabolic Acidosis</h3>
+          <div class="disorder-values">
+            <span class="dv-item dv-low">pH ↓</span>
+            <span class="dv-item dv-normal">CO₂ Nml*</span>
+            <span class="dv-item dv-low">HCO₃ ↓</span>
+          </div>
+          <p>Caused by DKA, lactic acidosis, renal failure, diarrhea.</p>
+        </div>
+        <div class="disorder-card metabolic-alkalosis">
+          <h3>Metabolic Alkalosis</h3>
+          <div class="disorder-values">
+            <span class="dv-item dv-high">pH ↑</span>
+            <span class="dv-item dv-normal">CO₂ Nml*</span>
+            <span class="dv-item dv-high">HCO₃ ↑</span>
+          </div>
+          <p>Caused by vomiting, nasogastric suctioning, diuretics, excess antacids.</p>
+        </div>
+        <div class="disorder-card mixed-disorder">
+          <h3>Mixed Disorders</h3>
+          <div class="disorder-values">
+            <span class="dv-item dv-mixed">pH varies</span>
+            <span class="dv-item dv-mixed">CO₂ varies</span>
+            <span class="dv-item dv-mixed">HCO₃ varies</span>
+          </div>
+          <p>Two simultaneous primary disorders (e.g., cardiac arrest with respiratory failure).</p>
+        </div>
+        <div class="disorder-card compensated">
+          <h3>Compensated States</h3>
+          <div class="disorder-values">
+            <span class="dv-item dv-normal">pH normal</span>
+            <span class="dv-item dv-mixed">CO₂ varies</span>
+            <span class="dv-item dv-mixed">HCO₃ varies</span>
+          </div>
+          <p>Body has corrected pH via opposite system (lungs or kidneys) — both values abnormal.</p>
+        </div>
+      </div>
+      <p class="disorders-note">* May become abnormal during compensation. See the <a href={`${base}reference`}>Reference page</a> for full details.</p>
+    </div>
+  </section>
+
+  <!-- Tools CTA -->
+  <section class="section section-cta">
+    <div class="container">
+      <h2>Ready to Test Your Knowledge?</h2>
+      <p>Use our interactive tools to practice interpreting real clinical ABG scenarios.</p>
+      <div class="cta-grid">
+        <a href={`${base}interpreter`} class="cta-card">
+          <div class="cta-icon">🔬</div>
+          <h3>ABG Interpreter</h3>
+          <p>Enter ABG values and get step-by-step guidance through the interpretation process.</p>
+          <span class="cta-arrow">Start →</span>
+        </a>
+        <a href={`${base}scenarios`} class="cta-card">
+          <div class="cta-icon">📋</div>
+          <h3>Clinical Scenarios</h3>
+          <p>Practice with 12 pre-built clinical cases covering all major acid-base disorders.</p>
+          <span class="cta-arrow">Practice →</span>
+        </a>
+        <a href={`${base}reference`} class="cta-card">
+          <div class="cta-icon">📚</div>
+          <h3>Quick Reference</h3>
+          <p>Comprehensive tables, mnemonics, and causes for all acid-base disorders.</p>
+          <span class="cta-arrow">View →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 60%, var(--color-secondary) 100%);
+    color: #fff;
+    padding: 4rem 0 3rem;
+  }
+
+  .hero .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #fff;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .hero-highlight {
+    color: #a8e6cf;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.92;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-outline-white {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.7);
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+    text-decoration: none;
+  }
+
+  .btn-outline-white:hover {
+    background: rgba(255,255,255,0.15);
+    text-decoration: none;
+  }
+
+  /* ABG visual display */
+  .abg-display {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .abg-result {
+    grid-column: 1 / -1;
+    background: rgba(255,255,255,0.15);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .abg-compensate {
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 0.85;
+    background: rgba(0,0,0,0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .abg-value {
+    background: rgba(255,255,255,0.1);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .abg-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+  }
+
+  .abg-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .abg-status {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+  }
+
+  .abg-low { background: rgba(255, 100, 100, 0.3); color: #ffcdd2; }
+  .abg-high { background: rgba(255, 183, 77, 0.3); color: #ffe082; }
+  .abg-normal { background: rgba(129, 199, 132, 0.3); color: #c8e6c9; }
+
+  /* Sections */
+  .section {
+    padding: 4rem 0;
+  }
+
+  .section-alt {
+    background: var(--color-primary-light);
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary-dark);
+    text-align: center;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: 2.5rem;
+    font-size: 1.05rem;
+  }
+
+  /* Values grid */
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .value-card {
+    background: var(--color-card);
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: transform 0.2s;
+  }
+
+  .value-card:hover { transform: translateY(-3px); }
+
+  .value-ph { border-color: #1a6b8a; }
+  .value-co2 { border-color: #e76f51; }
+  .value-hco3 { border-color: #5e35b1; }
+  .value-o2 { border-color: #2a9d8f; }
+
+  .value-icon {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+
+  .value-ph .value-icon { color: #1a6b8a; }
+  .value-co2 .value-icon { color: #e76f51; }
+  .value-hco3 .value-icon { color: #5e35b1; }
+  .value-o2 .value-icon { color: #2a9d8f; }
+
+  .value-card h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+
+  .value-range {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0.5rem 0;
+    color: var(--color-primary);
+  }
+
+  .value-card p {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .value-extremes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+  }
+
+  .extreme-low {
+    background: #fde8e8;
+    color: #c0392b;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+    font-weight: 600;
+  }
+
+  .extreme-high {
+    background: #fff3e0;
+    color: #e65100;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+    font-weight: 600;
+  }
+
+  /* Steps */
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .step-item {
+    display: flex;
+    gap: 1.5rem;
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    align-items: flex-start;
+  }
+
+  .step-number {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 900;
+  }
+
+  .step-content h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .step-content p {
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .step-tip {
+    background: #fffde7;
+    border-left: 3px solid var(--color-warning);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0 0.3rem 0.3rem 0;
+    font-size: 0.9rem;
+  }
+
+  .compensation-guide {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  .comp-item {
+    background: var(--color-primary-light);
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+  }
+
+  /* Disorders grid */
+  .disorders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .disorder-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+    border-left: 4px solid transparent;
+  }
+
+  .respiratory-acidosis { border-color: #e63946; }
+  .respiratory-alkalosis { border-color: #2a9d8f; }
+  .metabolic-acidosis { border-color: #f4a261; }
+  .metabolic-alkalosis { border-color: #5e35b1; }
+  .mixed-disorder { border-color: #999; }
+  .compensated { border-color: #1a6b8a; }
+
+  .disorder-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .disorder-values {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .dv-item {
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .dv-low { background: #fde8e8; color: #c0392b; }
+  .dv-high { background: #e8f4ee; color: #1d7a4b; }
+  .dv-normal { background: #e8f4f8; color: #1a6b8a; }
+  .dv-mixed { background: #f5f5f5; color: #555; }
+
+  .disorder-card p {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+  }
+
+  .disorders-note {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: 0.75rem;
+  }
+
+  /* CTA Section */
+  .section-cta {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #fff;
+    text-align: center;
+  }
+
+  .section-cta h2 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-cta > .container > p {
+    opacity: 0.9;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .cta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    text-align: left;
+  }
+
+  .cta-card {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .cta-card:hover {
+    background: rgba(255,255,255,0.2);
+    text-decoration: none;
+    transform: translateY(-3px);
+  }
+
+  .cta-icon { font-size: 2rem; }
+
+  .cta-card h3 {
+    color: #fff;
+    font-size: 1.15rem;
+  }
+
+  .cta-card p {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    flex: 1;
+  }
+
+  .cta-arrow {
+    font-weight: 700;
+    color: #a8e6cf;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero .container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .abg-display {
+      max-width: 100%;
+    }
+    .step-item {
+      flex-direction: column;
+    }
+  }
+</style>

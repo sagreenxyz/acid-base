@@ -1,0 +1,1059 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="ABG Interpreter" description="Interactive step-by-step arterial blood gas (ABG) interpreter for nursing students.">
+  <div class="interpreter-page">
+    <div class="container">
+      <div class="page-header">
+        <h1>Interactive ABG Interpreter</h1>
+        <p class="page-subtitle">
+          Enter your patient's ABG values below and follow the guided, step-by-step interpretation.
+          Each step explains the reasoning behind the interpretation.
+        </p>
+      </div>
+
+      <!-- Input Panel -->
+      <div class="interpreter-layout">
+        <aside class="input-panel card">
+          <h2>Enter ABG Values</h2>
+
+          <div class="input-group">
+            <label for="ph">
+              pH
+              <span class="normal-range">(Normal: 7.35–7.45)</span>
+            </label>
+            <input type="number" id="ph" step="0.01" min="6.80" max="7.80" placeholder="e.g. 7.32" />
+          </div>
+
+          <div class="input-group">
+            <label for="pco2">
+              PaCO₂ <span class="unit">mmHg</span>
+              <span class="normal-range">(Normal: 35–45)</span>
+            </label>
+            <input type="number" id="pco2" step="1" min="10" max="100" placeholder="e.g. 52" />
+          </div>
+
+          <div class="input-group">
+            <label for="hco3">
+              HCO₃⁻ <span class="unit">mEq/L</span>
+              <span class="normal-range">(Normal: 22–26)</span>
+            </label>
+            <input type="number" id="hco3" step="1" min="5" max="50" placeholder="e.g. 24" />
+          </div>
+
+          <div class="input-group">
+            <label for="pao2">
+              PaO₂ <span class="unit">mmHg</span>
+              <span class="normal-range">(Normal: 80–100)</span>
+              <span class="optional">(optional)</span>
+            </label>
+            <input type="number" id="pao2" step="1" min="20" max="700" placeholder="e.g. 92" />
+          </div>
+
+          <div class="btn-row">
+            <button id="interpret-btn" class="btn btn-primary" onclick="interpretABG()">
+              🔬 Interpret ABG
+            </button>
+            <button id="reset-btn" class="btn btn-outline" onclick="resetInterpreter()">
+              ↺ Reset
+            </button>
+          </div>
+
+          <div class="quick-load">
+            <p class="quick-load-title">Quick Load Examples:</p>
+            <div class="quick-examples">
+              <button class="example-btn" onclick="loadExample('resp-acidosis')">Resp. Acidosis</button>
+              <button class="example-btn" onclick="loadExample('resp-alkalosis')">Resp. Alkalosis</button>
+              <button class="example-btn" onclick="loadExample('met-acidosis')">Met. Acidosis</button>
+              <button class="example-btn" onclick="loadExample('met-alkalosis')">Met. Alkalosis</button>
+              <button class="example-btn" onclick="loadExample('comp-resp-acid')">Comp. Resp. Acidosis</button>
+              <button class="example-btn" onclick="loadExample('comp-met-acid')">Comp. Met. Acidosis</button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Results Panel -->
+        <div class="results-panel">
+          <div id="placeholder" class="placeholder-state">
+            <div class="placeholder-icon">🧪</div>
+            <h3>Enter ABG Values to Begin</h3>
+            <p>Fill in the pH, PaCO₂, and HCO₃⁻ values on the left, then click <strong>"Interpret ABG"</strong> to see a step-by-step guided interpretation.</p>
+          </div>
+
+          <div id="results" class="results-content" style="display:none">
+            <!-- Summary Banner -->
+            <div id="summary-banner" class="summary-banner"></div>
+
+            <!-- Step-by-step breakdown -->
+            <div class="steps-container">
+              <h2>Step-by-Step Interpretation</h2>
+
+              <div class="step-card" id="step1-card">
+                <div class="step-header">
+                  <div class="step-num">Step 1</div>
+                  <h3>Evaluate the pH</h3>
+                </div>
+                <div class="step-body" id="step1-body"></div>
+              </div>
+
+              <div class="step-card" id="step2-card">
+                <div class="step-header">
+                  <div class="step-num">Step 2</div>
+                  <h3>Evaluate the PaCO₂ (Respiratory Component)</h3>
+                </div>
+                <div class="step-body" id="step2-body"></div>
+              </div>
+
+              <div class="step-card" id="step3-card">
+                <div class="step-header">
+                  <div class="step-num">Step 3</div>
+                  <h3>Evaluate the HCO₃⁻ (Metabolic Component)</h3>
+                </div>
+                <div class="step-body" id="step3-body"></div>
+              </div>
+
+              <div class="step-card" id="step4-card">
+                <div class="step-header">
+                  <div class="step-num">Step 4</div>
+                  <h3>Determine Compensation</h3>
+                </div>
+                <div class="step-body" id="step4-body"></div>
+              </div>
+
+              <div class="step-card" id="step5-card">
+                <div class="step-header">
+                  <div class="step-num">Step 5</div>
+                  <h3>Final Interpretation & Clinical Implications</h3>
+                </div>
+                <div class="step-body" id="step5-body"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // --- Types ---
+  type PHStatus = 'acidosis' | 'normal' | 'alkalosis';
+  type ComponentStatus = 'low' | 'normal' | 'high';
+  type Disorder = 
+    | 'Respiratory Acidosis'
+    | 'Respiratory Alkalosis'
+    | 'Metabolic Acidosis'
+    | 'Metabolic Alkalosis'
+    | 'Normal ABG'
+    | 'Mixed Disorder';
+  type Compensation = 'Uncompensated' | 'Partially Compensated' | 'Fully Compensated' | 'Normal' | 'Mixed';
+
+  // --- Example ABG values ---
+  const examples: Record<string, { ph: number; pco2: number; hco3: number; pao2: number }> = {
+    'resp-acidosis': { ph: 7.28, pco2: 58, hco3: 24, pao2: 68 },
+    'resp-alkalosis': { ph: 7.52, pco2: 28, hco3: 23, pao2: 98 },
+    'met-acidosis': { ph: 7.30, pco2: 38, hco3: 14, pao2: 88 },
+    'met-alkalosis': { ph: 7.50, pco2: 42, hco3: 32, pao2: 94 },
+    'comp-resp-acid': { ph: 7.37, pco2: 62, hco3: 34, pao2: 72 },
+    'comp-met-acid': { ph: 7.36, pco2: 28, hco3: 16, pao2: 92 },
+  };
+
+  function loadExample(key: string): void {
+    const ex = examples[key];
+    if (!ex) return;
+    (document.getElementById('ph') as HTMLInputElement).value = String(ex.ph);
+    (document.getElementById('pco2') as HTMLInputElement).value = String(ex.pco2);
+    (document.getElementById('hco3') as HTMLInputElement).value = String(ex.hco3);
+    (document.getElementById('pao2') as HTMLInputElement).value = String(ex.pao2);
+    interpretABG();
+  }
+
+  // Make functions global so they can be called from onclick
+  (window as any).loadExample = loadExample;
+  (window as any).interpretABG = interpretABG;
+  (window as any).resetInterpreter = resetInterpreter;
+
+  function resetInterpreter(): void {
+    ['ph', 'pco2', 'hco3', 'pao2'].forEach(id => {
+      (document.getElementById(id) as HTMLInputElement).value = '';
+    });
+    document.getElementById('results')!.style.display = 'none';
+    document.getElementById('placeholder')!.style.display = 'block';
+  }
+
+  function phStatus(ph: number): PHStatus {
+    if (ph < 7.35) return 'acidosis';
+    if (ph > 7.45) return 'alkalosis';
+    return 'normal';
+  }
+
+  function co2Status(pco2: number): ComponentStatus {
+    if (pco2 < 35) return 'low';
+    if (pco2 > 45) return 'high';
+    return 'normal';
+  }
+
+  function hco3Status(hco3: number): ComponentStatus {
+    if (hco3 < 22) return 'low';
+    if (hco3 > 26) return 'high';
+    return 'normal';
+  }
+
+  function statusBadge(label: string, status: string): string {
+    const classMap: Record<string, string> = {
+      low: 'badge-low', high: 'badge-high', normal: 'badge-normal',
+      acidosis: 'badge-low', alkalosis: 'badge-high',
+    };
+    return `<span class="result-badge ${classMap[status] ?? 'badge-normal'}">${label}</span>`;
+  }
+
+  function determineDisorder(
+    phS: PHStatus, co2S: ComponentStatus, hco3S: ComponentStatus
+  ): Disorder {
+    // Primary respiratory
+    if (phS === 'acidosis' && co2S === 'high') return 'Respiratory Acidosis';
+    if (phS === 'alkalosis' && co2S === 'low') return 'Respiratory Alkalosis';
+    // Primary metabolic
+    if (phS === 'acidosis' && hco3S === 'low') return 'Metabolic Acidosis';
+    if (phS === 'alkalosis' && hco3S === 'high') return 'Metabolic Alkalosis';
+    // Normal
+    if (phS === 'normal' && co2S === 'normal' && hco3S === 'normal') return 'Normal ABG';
+    // Compensated (pH normal but one component is off)
+    if (phS === 'normal' && (co2S !== 'normal' || hco3S !== 'normal')) {
+      // Decide based on which component is abnormal and matches
+      if (co2S === 'high' && hco3S === 'high') return 'Respiratory Acidosis'; // comp resp acidosis
+      if (co2S === 'low' && hco3S === 'low') return 'Respiratory Alkalosis'; // comp resp alkalosis
+    }
+    // Mixed or unclear
+    return 'Mixed Disorder';
+  }
+
+  function determineCompensation(
+    ph: number, phS: PHStatus, co2S: ComponentStatus, hco3S: ComponentStatus, disorder: Disorder
+  ): Compensation {
+    if (disorder === 'Normal ABG') return 'Normal';
+    if (disorder === 'Mixed Disorder') return 'Mixed';
+
+    const isRespPrimary = disorder === 'Respiratory Acidosis' || disorder === 'Respiratory Alkalosis';
+    const isMetPrimary = disorder === 'Metabolic Acidosis' || disorder === 'Metabolic Alkalosis';
+
+    const respAbnormal = co2S !== 'normal';
+    const metAbnormal = hco3S !== 'normal';
+
+    if (isRespPrimary) {
+      if (!metAbnormal) return 'Uncompensated';
+      if (phS === 'normal') return 'Fully Compensated';
+      return 'Partially Compensated';
+    }
+    if (isMetPrimary) {
+      if (!respAbnormal) return 'Uncompensated';
+      if (phS === 'normal') return 'Fully Compensated';
+      return 'Partially Compensated';
+    }
+    return 'Uncompensated';
+  }
+
+  function getClinicalCauses(disorder: Disorder): string[] {
+    const causes: Record<Disorder, string[]> = {
+      'Respiratory Acidosis': ['COPD exacerbation', 'Opioid/sedative overdose', 'Neuromuscular disease (Guillain-Barré)', 'Severe asthma', 'Sleep apnea', 'Pneumothorax'],
+      'Respiratory Alkalosis': ['Anxiety / hyperventilation', 'Pain or fever', 'Mechanical over-ventilation', 'Pulmonary embolism', 'High altitude', 'Pregnancy (physiologic)'],
+      'Metabolic Acidosis': ['Diabetic ketoacidosis (DKA)', 'Lactic acidosis (sepsis, shock)', 'Renal failure', 'Severe diarrhea', 'Salicylate toxicity', 'Starvation'],
+      'Metabolic Alkalosis': ['Vomiting / NG suction', 'Diuretics (loop, thiazide)', 'Excess antacid ingestion', 'Hyperaldosteronism', 'Hypokalemia', 'Corticosteroid use'],
+      'Normal ABG': ['Normal physiologic state', 'Compensated disorder returning to baseline'],
+      'Mixed Disorder': ['Cardiac arrest (met. acidosis + resp. acidosis)', 'Salicylate toxicity (early resp. alkalosis + met. acidosis)', 'Combined electrolyte abnormalities'],
+    };
+    return causes[disorder] ?? [];
+  }
+
+  function getNursingInterventions(disorder: Disorder): string[] {
+    const interventions: Record<Disorder, string[]> = {
+      'Respiratory Acidosis': [
+        'Position upright (high Fowler\'s) to maximize lung expansion',
+        'Administer ordered bronchodilators and respiratory treatments',
+        'Prepare for possible intubation or non-invasive ventilation (BiPAP)',
+        'Monitor respiratory rate, depth, and oxygen saturation continuously',
+        'Avoid respiratory depressants (opioids, sedatives) unless medically ordered',
+        'Encourage coughing and deep breathing exercises',
+      ],
+      'Respiratory Alkalosis': [
+        'Identify and treat the underlying cause (anxiety, pain, fever)',
+        'Coach patient to slow breathing rate (diaphragmatic breathing)',
+        'Administer anxiolytics if anxiety-related, per order',
+        'Monitor electrolytes — especially calcium (alkalosis can cause hypocalcemia)',
+        'Adjust ventilator settings if patient is mechanically ventilated',
+      ],
+      'Metabolic Acidosis': [
+        'Administer IV sodium bicarbonate if ordered (severe cases)',
+        'Treat underlying cause (insulin for DKA, fluids for dehydration, dialysis for renal failure)',
+        'Monitor potassium levels closely (acidosis shifts K+ out of cells)',
+        'Ensure adequate IV fluid resuscitation',
+        'Monitor cardiac rhythm for hyperkalemia-related changes',
+        'Provide respiratory support if compensatory breathing becomes exhausted',
+      ],
+      'Metabolic Alkalosis': [
+        'Replace potassium and chloride losses (IV or oral KCl per order)',
+        'Discontinue causative agents (diuretics, antacids) if appropriate',
+        'Administer isotonic saline to replace volume and correct chloride deficit',
+        'Monitor for signs of hypokalemia and hypocalcemia',
+        'If on NG suction, consider H2 blockers to reduce acid loss',
+      ],
+      'Normal ABG': [
+        'No specific intervention required for the ABG itself',
+        'Continue monitoring as clinically indicated',
+      ],
+      'Mixed Disorder': [
+        'Identify and treat all contributing disorders simultaneously',
+        'Consult with physician or intensivist',
+        'Close monitoring of all ABG parameters and electrolytes',
+        'Prioritize treatment of the most life-threatening component',
+      ],
+    };
+    return interventions[disorder] ?? [];
+  }
+
+  function interpretABG(): void {
+    const phInput = (document.getElementById('ph') as HTMLInputElement).value;
+    const pco2Input = (document.getElementById('pco2') as HTMLInputElement).value;
+    const hco3Input = (document.getElementById('hco3') as HTMLInputElement).value;
+    const pao2Input = (document.getElementById('pao2') as HTMLInputElement).value;
+
+    if (!phInput || !pco2Input || !hco3Input) {
+      alert('Please enter pH, PaCO₂, and HCO₃⁻ values to interpret.');
+      return;
+    }
+
+    const ph = parseFloat(phInput);
+    const pco2 = parseFloat(pco2Input);
+    const hco3 = parseFloat(hco3Input);
+    const pao2 = pao2Input ? parseFloat(pao2Input) : null;
+
+    const phS = phStatus(ph);
+    const co2S = co2Status(pco2);
+    const hco3S = hco3Status(hco3);
+    const disorder = determineDisorder(phS, co2S, hco3S);
+    const compensation = determineCompensation(ph, phS, co2S, hco3S, disorder);
+    const causes = getClinicalCauses(disorder);
+    const interventions = getNursingInterventions(disorder);
+
+    // Show results
+    document.getElementById('placeholder')!.style.display = 'none';
+    document.getElementById('results')!.style.display = 'block';
+
+    // Summary banner
+    const summaryEl = document.getElementById('summary-banner')!;
+    const disorderClass = disorder.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z-]/g, '');
+    summaryEl.innerHTML = `
+      <div class="summary-main">
+        <div class="summary-diagnosis">
+          <span class="summary-label">Diagnosis</span>
+          <span class="summary-value disorder-${disorderClass}">${disorder}</span>
+        </div>
+        <div class="summary-comp">
+          <span class="summary-label">Compensation</span>
+          <span class="summary-value">${compensation}</span>
+        </div>
+      </div>
+      <div class="summary-values">
+        <div class="sv-item ${phS !== 'normal' ? 'sv-abnormal' : ''}">
+          <span class="sv-label">pH</span>
+          <span class="sv-num">${ph}</span>
+          <span class="sv-status">${phS}</span>
+        </div>
+        <div class="sv-item ${co2S !== 'normal' ? 'sv-abnormal' : ''}">
+          <span class="sv-label">PaCO₂</span>
+          <span class="sv-num">${pco2}</span>
+          <span class="sv-status">${co2S}</span>
+        </div>
+        <div class="sv-item ${hco3S !== 'normal' ? 'sv-abnormal' : ''}">
+          <span class="sv-label">HCO₃⁻</span>
+          <span class="sv-num">${hco3}</span>
+          <span class="sv-status">${hco3S}</span>
+        </div>
+        ${pao2 !== null ? `
+        <div class="sv-item ${pao2 < 80 ? 'sv-abnormal' : ''}">
+          <span class="sv-label">PaO₂</span>
+          <span class="sv-num">${pao2}</span>
+          <span class="sv-status">${pao2 < 60 ? 'severe hypoxemia' : pao2 < 80 ? 'hypoxemia' : 'normal'}</span>
+        </div>
+        ` : ''}
+      </div>
+    `;
+
+    // Step 1: pH
+    document.getElementById('step1-body')!.innerHTML = `
+      <div class="step-value-display">
+        <div class="sv-big">pH = <strong>${ph}</strong></div>
+        ${statusBadge(phS === 'acidosis' ? 'Acidotic (< 7.35)' : phS === 'alkalosis' ? 'Alkalotic (> 7.45)' : 'Normal (7.35–7.45)', phS)}
+      </div>
+      <p>${phS === 'acidosis' ? 
+        `The pH of <strong>${ph}</strong> is <strong>below 7.35</strong>, indicating <strong>acidosis</strong>. The blood is too acidic. We now need to determine whether this is respiratory, metabolic, or a mixed origin.` :
+        phS === 'alkalosis' ?
+        `The pH of <strong>${ph}</strong> is <strong>above 7.45</strong>, indicating <strong>alkalosis</strong>. The blood is too alkaline (basic). We now need to determine whether this is respiratory, metabolic, or a mixed origin.` :
+        `The pH of <strong>${ph}</strong> is <strong>within normal range (7.35–7.45)</strong>. The overall acid-base status appears normal — but we still need to check CO₂ and HCO₃⁻ to see if compensation is occurring.`
+      }</p>
+      <div class="ph-scale">
+        <div class="scale-bar">
+          <div class="scale-zone acidosis-zone">Acidosis<br/>&lt;7.35</div>
+          <div class="scale-zone normal-zone">Normal<br/>7.35–7.45</div>
+          <div class="scale-zone alkalosis-zone">Alkalosis<br/>&gt;7.45</div>
+          <div class="scale-marker" style="left: ${Math.min(100, Math.max(0, ((ph - 6.8) / (7.8 - 6.8)) * 100))}%"></div>
+        </div>
+        <div class="scale-current">Patient pH: ${ph}</div>
+      </div>
+    `;
+
+    // Step 2: PaCO2
+    const co2Interpretation = co2S === 'high' ?
+      `<strong>Elevated PaCO₂ (${pco2} > 45 mmHg)</strong> indicates <strong>respiratory acidosis</strong>. The lungs are retaining CO₂ (hypoventilation). CO₂ + H₂O → H₂CO₃ → increased H⁺ → lower pH. This respiratory component MATCHES the acidotic pH — suggesting this is the primary problem.` :
+      co2S === 'low' ?
+      `<strong>Low PaCO₂ (${pco2} < 35 mmHg)</strong> indicates <strong>respiratory alkalosis</strong>. The lungs are expelling too much CO₂ (hyperventilation). Less CO₂ → less H₂CO₃ → fewer H⁺ ions → higher pH. This respiratory component MATCHES the alkalotic pH — suggesting this is the primary problem or compensatory response.` :
+      `<strong>Normal PaCO₂ (${pco2}, range 35–45 mmHg)</strong> — the respiratory system does not appear to be the primary driver of the acid-base disturbance.`;
+
+    document.getElementById('step2-body')!.innerHTML = `
+      <div class="step-value-display">
+        <div class="sv-big">PaCO₂ = <strong>${pco2} mmHg</strong></div>
+        ${statusBadge(co2S === 'high' ? 'High (> 45) → Resp. Acidosis' : co2S === 'low' ? 'Low (< 35) → Resp. Alkalosis' : 'Normal (35–45)', co2S)}
+      </div>
+      <p>${co2Interpretation}</p>
+      <div class="rome-note">
+        <strong>🔑 ROME:</strong> Respiratory = <strong>O</strong>pposite — pH and PaCO₂ move in OPPOSITE directions.
+        ${co2S === 'high' && phS === 'acidosis' ? '<span class="rome-match">✓ CO₂ ↑ and pH ↓ — MATCHES respiratory component</span>' : ''}
+        ${co2S === 'low' && phS === 'alkalosis' ? '<span class="rome-match">✓ CO₂ ↓ and pH ↑ — MATCHES respiratory component</span>' : ''}
+        ${co2S === 'normal' ? '<span class="rome-neutral">CO₂ normal — respiratory is not the primary driver</span>' : ''}
+      </div>
+    `;
+
+    // Step 3: HCO3
+    const hco3Interpretation = hco3S === 'low' ?
+      `<strong>Low HCO₃⁻ (${hco3} < 22 mEq/L)</strong> indicates <strong>metabolic acidosis</strong>. The kidneys are not retaining enough bicarbonate buffer, OR the bicarbonate is being consumed by excess acid. This metabolic component MATCHES the acidotic pH.` :
+      hco3S === 'high' ?
+      `<strong>Elevated HCO₃⁻ (${hco3} > 26 mEq/L)</strong> indicates <strong>metabolic alkalosis</strong>. The kidneys are retaining excess bicarbonate, raising the blood pH. This metabolic component MATCHES the alkalotic pH.` :
+      `<strong>Normal HCO₃⁻ (${hco3}, range 22–26 mEq/L)</strong> — the metabolic (kidney) system does not appear to be the primary driver of the imbalance.`;
+
+    document.getElementById('step3-body')!.innerHTML = `
+      <div class="step-value-display">
+        <div class="sv-big">HCO₃⁻ = <strong>${hco3} mEq/L</strong></div>
+        ${statusBadge(hco3S === 'low' ? 'Low (< 22) → Met. Acidosis' : hco3S === 'high' ? 'High (> 26) → Met. Alkalosis' : 'Normal (22–26)', hco3S)}
+      </div>
+      <p>${hco3Interpretation}</p>
+      <div class="rome-note">
+        <strong>🔑 ROME:</strong> Metabolic = <strong>E</strong>qual — pH and HCO₃⁻ move in the SAME direction.
+        ${hco3S === 'low' && phS === 'acidosis' ? '<span class="rome-match">✓ HCO₃⁻ ↓ and pH ↓ — MATCHES metabolic component</span>' : ''}
+        ${hco3S === 'high' && phS === 'alkalosis' ? '<span class="rome-match">✓ HCO₃⁻ ↑ and pH ↑ — MATCHES metabolic component</span>' : ''}
+        ${hco3S === 'normal' ? '<span class="rome-neutral">HCO₃⁻ normal — metabolic is not the primary driver</span>' : ''}
+      </div>
+    `;
+
+    // Step 4: Compensation
+    let compExplanation = '';
+    if (compensation === 'Uncompensated') {
+      compExplanation = `Only one system (${disorder.includes('Respiratory') ? 'respiratory' : 'metabolic'}) is abnormal. The compensating system has <strong>not yet responded</strong> — this is either an acute disorder or compensation has not begun. The body typically starts compensating within minutes (respiratory) to days (renal).`;
+    } else if (compensation === 'Partially Compensated') {
+      compExplanation = `Both the respiratory and metabolic components are abnormal, indicating the body <strong>is compensating</strong> but has not fully corrected the pH (pH is still outside 7.35–7.45). The ${disorder.includes('Respiratory') ? 'kidneys are retaining/excreting bicarbonate' : 'lungs are adjusting breathing rate'} to counter the primary disorder.`;
+    } else if (compensation === 'Fully Compensated') {
+      compExplanation = `Both components are abnormal, but the pH is within normal range — the body has <strong>fully compensated</strong>. Note: even with a "normal" pH, the patient still has an underlying disorder. Watch for decompensation if the underlying cause isn't treated. Remember, the pH will be closer to its affected side (acidosis: 7.35–7.39; alkalosis: 7.41–7.45).`;
+    } else if (compensation === 'Normal') {
+      compExplanation = 'All values are within normal limits. No compensation needed.';
+    } else {
+      compExplanation = 'This appears to be a mixed disorder with multiple primary disturbances occurring simultaneously. Identify each component and treat accordingly.';
+    }
+
+    document.getElementById('step4-body')!.innerHTML = `
+      <div class="comp-badge-row">
+        <span class="comp-badge">${compensation}</span>
+      </div>
+      <p>${compExplanation}</p>
+      <div class="comp-table">
+        <div class="ct-header">
+          <span>Component</span>
+          <span>Value</span>
+          <span>Status</span>
+          <span>Role</span>
+        </div>
+        <div class="ct-row ${co2S !== 'normal' ? 'ct-abnormal' : ''}">
+          <span>PaCO₂ (Respiratory)</span>
+          <span>${pco2} mmHg</span>
+          <span>${co2S}</span>
+          <span>${(disorder === 'Respiratory Acidosis' || disorder === 'Respiratory Alkalosis') && co2S !== 'normal' ? '🎯 Primary' : co2S !== 'normal' ? '🔄 Compensating' : '✓ Normal'}</span>
+        </div>
+        <div class="ct-row ${hco3S !== 'normal' ? 'ct-abnormal' : ''}">
+          <span>HCO₃⁻ (Metabolic)</span>
+          <span>${hco3} mEq/L</span>
+          <span>${hco3S}</span>
+          <span>${(disorder === 'Metabolic Acidosis' || disorder === 'Metabolic Alkalosis') && hco3S !== 'normal' ? '🎯 Primary' : hco3S !== 'normal' ? '🔄 Compensating' : '✓ Normal'}</span>
+        </div>
+      </div>
+    `;
+
+    // Step 5: Final interpretation
+    document.getElementById('step5-body')!.innerHTML = `
+      <div class="final-diagnosis">
+        <strong>Final Interpretation:</strong>
+        <span class="final-disorder">${compensation === 'Normal' ? '' : compensation + ' '}<span class="disorder-text">${disorder}</span></span>
+      </div>
+
+      ${causes.length > 0 ? `
+      <div class="clinical-section">
+        <h4>🩺 Common Clinical Causes</h4>
+        <ul class="cause-list">
+          ${causes.map(c => `<li>${c}</li>`).join('')}
+        </ul>
+      </div>
+      ` : ''}
+
+      <div class="clinical-section">
+        <h4>💉 Nursing Interventions</h4>
+        <ul class="intervention-list">
+          ${interventions.map(i => `<li>${i}</li>`).join('')}
+        </ul>
+      </div>
+
+      ${pao2 !== null ? `
+      <div class="clinical-section oxygenation">
+        <h4>🫁 Oxygenation Assessment</h4>
+        <p>PaO₂ = ${pao2} mmHg — 
+          ${pao2 < 60 ? '<strong class="ox-critical">Severe Hypoxemia</strong>: Immediate oxygen therapy and consider mechanical ventilation.' :
+            pao2 < 80 ? '<strong class="ox-warning">Hypoxemia</strong>: Supplemental oxygen indicated. Monitor closely.' :
+            '<span class="ox-normal">Normal oxygenation</span>. Continue monitoring.'}
+        </p>
+      </div>
+      ` : ''}
+
+      <div class="memory-tip">
+        <strong>🧠 ROME Mnemonic Summary:</strong>
+        <div class="rome-grid">
+          <div><strong>R</strong>espiratory</div>
+          <div><strong>O</strong>pposite (pH ↑ CO₂ ↓, or pH ↓ CO₂ ↑)</div>
+          <div><strong>M</strong>etabolic</div>
+          <div><strong>E</strong>qual (pH ↑ HCO₃ ↑, or pH ↓ HCO₃ ↓)</div>
+        </div>
+      </div>
+    `;
+
+    // Scroll to results
+    document.getElementById('results')!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+
+<style>
+  .interpreter-page {
+    padding: 2rem 0 4rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .interpreter-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Input Panel */
+  .input-panel h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1.25rem;
+    color: var(--color-primary-dark);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .input-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+  }
+
+  .unit {
+    font-weight: 400;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+
+  .optional {
+    font-weight: 400;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .normal-range {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+    margin-top: 0.1rem;
+  }
+
+  .input-group input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    font-family: monospace;
+    transition: border-color 0.15s;
+    color: var(--color-text);
+    background: #fff;
+  }
+
+  .input-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(26, 107, 138, 0.15);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-row .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .quick-load-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .quick-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .example-btn {
+    text-align: left;
+    background: var(--color-primary-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    color: var(--color-primary-dark);
+    font-weight: 500;
+  }
+
+  .example-btn:hover {
+    background: #d4eaf5;
+  }
+
+  /* Placeholder */
+  .placeholder-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--color-text-muted);
+    background: var(--color-card);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  .placeholder-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .placeholder-state h3 {
+    margin-bottom: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Summary banner */
+  .summary-banner {
+    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-main {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .summary-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.75;
+    margin-bottom: 0.2rem;
+  }
+
+  .summary-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+
+  .summary-values {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .sv-item {
+    background: rgba(255,255,255,0.12);
+    border-radius: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .sv-item.sv-abnormal {
+    background: rgba(255, 120, 120, 0.25);
+    border: 1px solid rgba(255, 100, 100, 0.4);
+  }
+
+  .sv-label {
+    display: block;
+    font-size: 0.7rem;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .sv-num {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
+
+  .sv-status {
+    display: block;
+    font-size: 0.7rem;
+    opacity: 0.85;
+    text-transform: capitalize;
+  }
+
+  /* Steps */
+  .steps-container h2 {
+    font-size: 1.3rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .step-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--color-primary-light);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .step-num {
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .step-header h3 {
+    font-size: 1rem;
+    color: var(--color-primary-dark);
+    margin: 0;
+  }
+
+  .step-body {
+    padding: 1.25rem;
+  }
+
+  .step-body p {
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+    line-height: 1.65;
+  }
+
+  .step-value-display {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .sv-big {
+    font-size: 1.4rem;
+    color: var(--color-text);
+  }
+
+  .result-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .badge-low { background: #fde8e8; color: #c0392b; }
+  .badge-high { background: #e8f4ee; color: #1d7a4b; }
+  .badge-normal { background: #e8f4f8; color: #1a6b8a; }
+
+  /* pH Scale */
+  .ph-scale {
+    margin-top: 1rem;
+  }
+
+  .scale-bar {
+    display: flex;
+    height: 36px;
+    border-radius: 6px;
+    overflow: visible;
+    position: relative;
+    border: 1px solid var(--color-border);
+  }
+
+  .scale-zone {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
+    padding: 0 4px;
+  }
+
+  .acidosis-zone { background: #fde8e8; color: #c0392b; }
+  .normal-zone { background: #e8f4f8; color: #1a6b8a; flex: 0.5; }
+  .alkalosis-zone { background: #e8f4ee; color: #1d7a4b; }
+
+  .scale-marker {
+    position: absolute;
+    top: -4px;
+    bottom: -4px;
+    width: 3px;
+    background: var(--color-text);
+    border-radius: 3px;
+    transform: translateX(-50%);
+  }
+
+  .scale-current {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.3rem;
+  }
+
+  /* ROME note */
+  .rome-note {
+    background: #fffde7;
+    border-left: 3px solid var(--color-warning);
+    padding: 0.6rem 0.9rem;
+    border-radius: 0 0.3rem 0.3rem 0;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+
+  .rome-match {
+    display: block;
+    margin-top: 0.25rem;
+    color: #1d7a4b;
+    font-weight: 600;
+  }
+
+  .rome-neutral {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Compensation table */
+  .comp-badge-row {
+    margin-bottom: 0.75rem;
+  }
+
+  .comp-badge {
+    display: inline-block;
+    background: var(--color-primary);
+    color: #fff;
+    padding: 0.3rem 1rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .comp-table {
+    margin-top: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-size: 0.88rem;
+  }
+
+  .ct-header, .ct-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 0;
+  }
+
+  .ct-header {
+    background: var(--color-primary-light);
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary-dark);
+  }
+
+  .ct-header span, .ct-row span {
+    padding: 0.5rem 0.75rem;
+    border-right: 1px solid var(--color-border);
+  }
+
+  .ct-header span:last-child, .ct-row span:last-child {
+    border-right: none;
+  }
+
+  .ct-row {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ct-row.ct-abnormal {
+    background: #fff8f8;
+  }
+
+  /* Final interpretation */
+  .final-diagnosis {
+    background: var(--color-primary-light);
+    border-left: 4px solid var(--color-primary);
+    padding: 0.75rem 1rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .final-disorder {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-primary-dark);
+  }
+
+  .clinical-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .clinical-section h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary-dark);
+  }
+
+  .cause-list, .intervention-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .cause-list li, .intervention-list li {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    border-left: 3px solid var(--color-border);
+    padding-left: 0.75rem;
+  }
+
+  .cause-list li::before {
+    content: "• ";
+    color: var(--color-primary);
+  }
+
+  .intervention-list li {
+    border-left-color: var(--color-secondary);
+    background: #f0faf9;
+  }
+
+  .intervention-list li::before {
+    content: "→ ";
+    color: var(--color-secondary);
+    font-weight: 700;
+  }
+
+  .oxygenation {
+    background: #f0f8ff;
+    border: 1px solid #b0d4e8;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+  }
+
+  .ox-critical { color: #c0392b; }
+  .ox-warning { color: #e65100; }
+  .ox-normal { color: #1d7a4b; }
+
+  .memory-tip {
+    background: #fffde7;
+    border: 1px solid #ffe082;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .rome-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.2rem 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 900px) {
+    .interpreter-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

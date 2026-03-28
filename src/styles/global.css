@@ -1,0 +1,180 @@
+/* Global styles for Acid-Base Nursing Education Tool */
+:root {
+  --color-primary: #1a6b8a;
+  --color-primary-dark: #0f4a62;
+  --color-primary-light: #e8f4f8;
+  --color-secondary: #2a9d8f;
+  --color-accent: #e76f51;
+  --color-warning: #f4a261;
+  --color-danger: #e63946;
+  --color-success: #2a9d8f;
+  --color-text: #1d3557;
+  --color-text-muted: #5c7a8a;
+  --color-bg: #f8fbfc;
+  --color-card: #ffffff;
+  --color-border: #c8dde6;
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --radius: 0.5rem;
+  --shadow: 0 2px 8px rgba(26, 107, 138, 0.1);
+  --shadow-lg: 0 8px 24px rgba(26, 107, 138, 0.15);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Layout helpers */
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Card */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.badge-acidosis {
+  background: #fde8e8;
+  color: #c0392b;
+}
+
+.badge-alkalosis {
+  background: #e8f4ee;
+  color: #1d7a4b;
+}
+
+.badge-normal {
+  background: #e8f4f8;
+  color: #1a6b8a;
+}
+
+.badge-respiratory {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.badge-metabolic {
+  background: #ede7f6;
+  color: #5e35b1;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.1s;
+  text-decoration: none;
+}
+
+.btn:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #228b7e;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn-outline:hover {
+  background: var(--color-primary-light);
+}
+
+/* Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.text-center { text-align: center; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
