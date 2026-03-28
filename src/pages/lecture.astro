@@ -1,0 +1,1773 @@
+---
+import Layout from '../layouts/Layout.astro';
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : rawBase + '/';
+---
+
+<Layout title="Lecture" description="Nursing lecture on acid-base physiology: fixed vs volatile acids, compensation, clinical causes, and interactive quizzes.">
+  <div class="lecture-page">
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1>Acid-Base Physiology: Nursing Lecture</h1>
+        <p class="page-subtitle">
+          A guided lecture covering the physiology of acids and bases, how the lungs and kidneys maintain pH,
+          compensation mechanisms, clinical causes, and practice quizzes.
+        </p>
+        <nav class="toc" aria-label="Table of contents">
+          <strong>Jump to:</strong>
+          <a href="#acid-types">Acid Types</a>
+          <a href="#lungs-vs-kidneys">Lungs vs Kidneys</a>
+          <a href="#compensation">Compensation</a>
+          <a href="#clinical-causes">Clinical Causes</a>
+          <a href="#cns-depression">CNS Depression</a>
+          <a href="#scenarios">Scenarios</a>
+          <a href="#quiz">Quiz</a>
+        </nav>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           SECTION 1 — VOLATILE VS FIXED ACIDS (AND BASES)
+      ══════════════════════════════════════════════════════════ -->
+      <section class="lec-section" id="acid-types">
+        <h2><span class="section-num">1</span> Volatile Acids, Fixed Acids, and Their Counterparts</h2>
+
+        <p class="lead">
+          Not all acids are created equal. In human physiology, acids are divided into two fundamental
+          categories based on one key question: <strong>can this acid be converted to a gas and exhaled?</strong>
+          The answer determines which organ system eliminates it.
+        </p>
+
+        <div class="two-col-cards">
+          <!-- Volatile Acid -->
+          <div class="type-card volatile-acid">
+            <div class="type-header">
+              <span class="type-badge volatile">Volatile</span>
+              <h3>Volatile Acid — CO₂</h3>
+            </div>
+            <p>
+              A <strong>volatile acid</strong> is one that can be converted into a gas and eliminated by the lungs.
+              Carbon dioxide (CO₂) is the only clinically significant volatile acid in human physiology.
+            </p>
+            <div class="equation-box">
+              CO₂ + H₂O &nbsp;⇌&nbsp; H₂CO₃ &nbsp;⇌&nbsp; H⁺ + HCO₃⁻
+              <div class="eq-caption">CO₂ dissolves into carbonic acid, then dissociates into hydrogen ions and bicarbonate.</div>
+            </div>
+            <ul class="type-list">
+              <li>Produced continuously by cellular metabolism (≈ 15,000–20,000 mmol/day)</li>
+              <li>Carried in blood as dissolved CO₂, bicarbonate, and carbaminohemoglobin</li>
+              <li>Eliminated entirely by the <strong>lungs</strong> through ventilation</li>
+              <li>Regulated <em>within minutes</em> — fast response system</li>
+            </ul>
+            <div class="key-point">
+              <strong>💨 Key:</strong> When ventilation increases (hyperventilation), more CO₂ is blown off →
+              fewer H⁺ ions → pH rises. When ventilation decreases (hypoventilation), CO₂ accumulates →
+              more H⁺ ions → pH falls.
+            </div>
+          </div>
+
+          <!-- Fixed Acids -->
+          <div class="type-card fixed-acid">
+            <div class="type-header">
+              <span class="type-badge fixed">Fixed</span>
+              <h3>Fixed (Non-Volatile) Acids</h3>
+            </div>
+            <p>
+              <strong>Fixed acids</strong> — also called non-volatile acids — cannot be converted to a gas.
+              They have no respiratory route of elimination and must be excreted by the <strong>kidneys</strong>.
+            </p>
+            <ul class="type-list">
+              <li><strong>Lactic acid</strong> — from anaerobic metabolism (shock, intense exercise)</li>
+              <li><strong>Ketoacids</strong> — acetoacetic acid &amp; beta-hydroxybutyric acid (DKA, starvation)</li>
+              <li><strong>Phosphoric acid</strong> — from phosphoprotein/phospholipid metabolism</li>
+              <li><strong>Sulfuric acid</strong> — from sulfur-containing amino acid metabolism</li>
+              <li><strong>Ingested acids</strong> — aspirin (salicylic acid), methanol metabolites, ethylene glycol</li>
+            </ul>
+            <div class="key-point warning">
+              <strong>⚠️ Critical:</strong> The lungs <em>cannot</em> eliminate fixed acids. Breathing faster
+              can lower CO₂ and temporarily raise pH, but it does not remove lactic acid, ketoacids, or
+              ingested toxins — that is exclusively the kidneys' job (hours to days).
+            </div>
+            <div class="produced-day">
+              Fixed acid load: ≈ <strong>50–100 mEq/day</strong> from normal metabolism
+            </div>
+          </div>
+        </div>
+
+        <!-- Counterparts: Volatile Base removal & Fixed Bases -->
+        <h3 class="subsection-title">The Counterparts — How Bases Fit In</h3>
+        <p>
+          Just as acids are divided into volatile and fixed, we can think about how the body handles the
+          <em>base side</em> of the equation.
+        </p>
+
+        <div class="two-col-cards">
+          <!-- Volatile "base" — CO₂ removal -->
+          <div class="type-card volatile-base">
+            <div class="type-header">
+              <span class="type-badge volatile">Volatile</span>
+              <h3>Volatile Base Effect — Blowing Off CO₂</h3>
+            </div>
+            <p>
+              There is no true volatile base gas in human physiology, but the respiratory system creates
+              an equivalent <em>alkalinizing effect</em> by eliminating CO₂.
+            </p>
+            <ul class="type-list">
+              <li>Exhaling CO₂ drives the carbonic-acid equilibrium <strong>left</strong>: H⁺ + HCO₃⁻ → H₂CO₃ → CO₂ ↑ + H₂O</li>
+              <li>Net result: hydrogen ions are consumed → pH <strong>rises</strong></li>
+              <li>This is <em>physiologically equivalent</em> to adding a base — but it works only on the CO₂ side</li>
+              <li>Hyperventilation exploits this: anxiety, pain, fever, mechanical over-ventilation</li>
+            </ul>
+            <div class="key-point">
+              <strong>💡 Analogy:</strong> Think of the lungs as a "volatile acid dump" — when they dump more
+              CO₂, pH rises. When they dump less, pH falls.
+            </div>
+          </div>
+
+          <!-- Fixed Base — Bicarbonate -->
+          <div class="type-card fixed-base">
+            <div class="type-header">
+              <span class="type-badge fixed">Fixed</span>
+              <h3>Fixed Base — Bicarbonate (HCO₃⁻)</h3>
+            </div>
+            <p>
+              Bicarbonate is the primary <strong>fixed base</strong> of the body. Unlike CO₂, it cannot be
+              exhaled; it is manufactured, retained, or excreted exclusively by the <strong>kidneys</strong>.
+            </p>
+            <ul class="type-list">
+              <li>Normal range: <strong>22–26 mEq/L</strong></li>
+              <li>Kidneys reabsorb HCO₃⁻ (proximal tubule) or generate new HCO₃⁻ (distal tubule) to combat acidosis</li>
+              <li>Kidneys excrete HCO₃⁻ (reduce reabsorption) to combat alkalosis</li>
+              <li>Renal compensation takes <strong>hours to days</strong> — much slower than lung response</li>
+              <li>Also includes phosphate buffers and ammonia in urine as additional fixed-base mechanisms</li>
+            </ul>
+            <div class="key-point">
+              <strong>🔑 Memory hook:</strong> <em>Bicarbonate = Kidneys.</em>
+              If you see HCO₃⁻ out of range, the kidneys are either the cause of the problem
+              or are actively compensating for it.
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary comparison table -->
+        <div class="comparison-table-wrap">
+          <h3 class="subsection-title">Side-by-Side Comparison</h3>
+          <table class="lec-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th class="col-va">Volatile Acid (CO₂)</th>
+                <th class="col-fa">Fixed Acids</th>
+                <th class="col-vb">Volatile "Base" Effect</th>
+                <th class="col-fb">Fixed Base (HCO₃⁻)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Can be exhaled?</td>
+                <td class="col-va">✅ Yes</td>
+                <td class="col-fa">❌ No</td>
+                <td class="col-vb">✅ (CO₂ removal)</td>
+                <td class="col-fb">❌ No</td>
+              </tr>
+              <tr>
+                <td>Regulating organ</td>
+                <td class="col-va">Lungs</td>
+                <td class="col-fa">Kidneys</td>
+                <td class="col-vb">Lungs</td>
+                <td class="col-fb">Kidneys</td>
+              </tr>
+              <tr>
+                <td>Response speed</td>
+                <td class="col-va">Minutes</td>
+                <td class="col-fa">Hours – days</td>
+                <td class="col-vb">Minutes</td>
+                <td class="col-fb">Hours – days</td>
+              </tr>
+              <tr>
+                <td>ABG parameter</td>
+                <td class="col-va">PaCO₂</td>
+                <td class="col-fa">(causes ↓ HCO₃⁻)</td>
+                <td class="col-vb">PaCO₂ ↓</td>
+                <td class="col-fb">HCO₃⁻</td>
+              </tr>
+              <tr>
+                <td>Examples</td>
+                <td class="col-va">CO₂ from metabolism</td>
+                <td class="col-fa">Lactate, ketoacids, aspirin, phosphate, sulfate</td>
+                <td class="col-vb">Hyperventilation</td>
+                <td class="col-fb">Renal HCO₃⁻ retention/excretion</td>
+              </tr>
+              <tr>
+                <td>If increased → causes</td>
+                <td class="col-va">Respiratory acidosis</td>
+                <td class="col-fa">Metabolic acidosis</td>
+                <td class="col-vb">Respiratory alkalosis</td>
+                <td class="col-fb">Metabolic alkalosis</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           SECTION 2 — LUNGS VS KIDNEYS
+      ══════════════════════════════════════════════════════════ -->
+      <section class="lec-section" id="lungs-vs-kidneys">
+        <h2><span class="section-num">2</span> What the Lungs Can and Cannot Do</h2>
+
+        <div class="organ-compare">
+          <div class="organ-card lung-card">
+            <div class="organ-icon">🫁</div>
+            <h3>The Lungs</h3>
+            <p class="organ-subtitle">Respiratory Regulation — Fast but Limited</p>
+
+            <div class="can-do">
+              <h4>✅ CAN Do</h4>
+              <ul>
+                <li>Increase or decrease ventilation within <strong>seconds to minutes</strong></li>
+                <li>Raise pH by blowing off CO₂ (hyperventilate)</li>
+                <li>Lower pH by retaining CO₂ (hypoventilate)</li>
+                <li>Compensate for metabolic acidosis by hyperventilating (Kussmaul breathing)</li>
+                <li>Compensate for metabolic alkalosis by hypoventilating (mildly, limited)</li>
+              </ul>
+            </div>
+
+            <div class="cannot-do">
+              <h4>❌ CANNOT Do</h4>
+              <ul>
+                <li>Eliminate lactic acid — must wait for kidneys &amp; liver</li>
+                <li>Clear ketoacids (DKA) — only kidneys can excrete them</li>
+                <li>Excrete ingested toxins or drug metabolites (aspirin, methanol, ethylene glycol)</li>
+                <li>Restore bicarbonate — that requires renal tubular reabsorption</li>
+                <li>Achieve full compensation on their own — pH correction always remains partial via lungs alone</li>
+              </ul>
+            </div>
+
+            <div class="organ-abg">
+              <strong>ABG marker:</strong> <span class="badge-co2">PaCO₂ (35–45 mmHg)</span>
+            </div>
+          </div>
+
+          <div class="organ-card kidney-card">
+            <div class="organ-icon">🫘</div>
+            <h3>The Kidneys</h3>
+            <p class="organ-subtitle">Metabolic Regulation — Slower but Powerful</p>
+
+            <div class="can-do">
+              <h4>✅ CAN Do</h4>
+              <ul>
+                <li>Reabsorb bicarbonate (HCO₃⁻) from the filtrate to combat acidosis</li>
+                <li>Generate <em>new</em> bicarbonate via hydrogen ion secretion</li>
+                <li>Excrete fixed acids as ammonium (NH₄⁺) and titratable acids</li>
+                <li>Excrete excess bicarbonate to combat alkalosis</li>
+                <li>Provide near-complete compensation over hours to days</li>
+              </ul>
+            </div>
+
+            <div class="cannot-do">
+              <h4>❌ CANNOT Do</h4>
+              <ul>
+                <li>Respond quickly — renal compensation takes <strong>hours to days</strong></li>
+                <li>Help in acute respiratory emergencies (no time)</li>
+                <li>Eliminate CO₂ — that is strictly the lungs' job</li>
+                <li>Function normally if damaged (renal failure → metabolic acidosis)</li>
+              </ul>
+            </div>
+
+            <div class="organ-abg">
+              <strong>ABG marker:</strong> <span class="badge-hco3">HCO₃⁻ (22–26 mEq/L)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <strong>🧠 Clinical Pearl:</strong> In DKA, the patient breathes rapidly (Kussmaul respirations)
+          to blow off CO₂ and temporarily raise pH. But this does <em>not</em> remove ketoacids —
+          it only compensates for them. Treatment (insulin, IV fluids) is needed to stop ketoacid
+          production and allow the kidneys to excrete the fixed acid load.
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           SECTION 3 — COMPENSATION
+      ══════════════════════════════════════════════════════════ -->
+      <section class="lec-section" id="compensation">
+        <h2><span class="section-num">3</span> Compensation — Partial vs Full</h2>
+
+        <p class="lead">
+          When one system (respiratory or metabolic) develops a primary disorder, the <em>opposite</em>
+          system responds to restore pH toward normal. This is <strong>compensation</strong>. It is
+          always a corrective response — never the cause of the primary problem.
+        </p>
+
+        <div class="comp-stages">
+          <div class="comp-stage uncompensated">
+            <div class="comp-stage-label">Stage 1</div>
+            <h3>Uncompensated</h3>
+            <p>Only one component is abnormal. The compensating system has not yet responded (acute onset) or is unable to.</p>
+            <div class="comp-example">
+              <strong>Example — Respiratory Acidosis, Uncompensated:</strong><br/>
+              pH 7.28 ↓ &nbsp;|&nbsp; PaCO₂ 58 ↑ &nbsp;|&nbsp; HCO₃⁻ 24 (normal)
+            </div>
+          </div>
+
+          <div class="comp-stage partial">
+            <div class="comp-stage-label">Stage 2</div>
+            <h3>Partially Compensated</h3>
+            <p>Both components are abnormal. The compensating system is working but pH is still outside the normal range (7.35–7.45).</p>
+            <div class="comp-example">
+              <strong>Example — Respiratory Acidosis, Partially Compensated:</strong><br/>
+              pH 7.31 ↓ &nbsp;|&nbsp; PaCO₂ 58 ↑ &nbsp;|&nbsp; HCO₃⁻ 30 ↑ (kidneys retaining HCO₃⁻)
+            </div>
+          </div>
+
+          <div class="comp-stage full">
+            <div class="comp-stage-label">Stage 3</div>
+            <h3>Fully Compensated</h3>
+            <p>Both components are abnormal but pH has been pulled back into the normal range. The underlying disorder still exists.</p>
+            <div class="comp-example">
+              <strong>Example — Respiratory Acidosis, Fully Compensated:</strong><br/>
+              pH 7.38 (normal) &nbsp;|&nbsp; PaCO₂ 58 ↑ &nbsp;|&nbsp; HCO₃⁻ 34 ↑
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-rules">
+          <h3>Compensation Rules at a Glance</h3>
+          <table class="lec-table">
+            <thead>
+              <tr>
+                <th>Primary Disorder</th>
+                <th>Primary Change</th>
+                <th>Compensatory Response</th>
+                <th>Compensating Organ</th>
+                <th>Speed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Respiratory Acidosis</td>
+                <td>CO₂ ↑ → pH ↓</td>
+                <td>HCO₃⁻ ↑ (kidneys retain)</td>
+                <td>Kidneys</td>
+                <td>Hours – days</td>
+              </tr>
+              <tr>
+                <td>Respiratory Alkalosis</td>
+                <td>CO₂ ↓ → pH ↑</td>
+                <td>HCO₃⁻ ↓ (kidneys excrete)</td>
+                <td>Kidneys</td>
+                <td>Hours – days</td>
+              </tr>
+              <tr>
+                <td>Metabolic Acidosis</td>
+                <td>HCO₃⁻ ↓ → pH ↓</td>
+                <td>CO₂ ↓ (hyperventilation)</td>
+                <td>Lungs</td>
+                <td>Minutes</td>
+              </tr>
+              <tr>
+                <td>Metabolic Alkalosis</td>
+                <td>HCO₃⁻ ↑ → pH ↑</td>
+                <td>CO₂ ↑ (hypoventilation)</td>
+                <td>Lungs</td>
+                <td>Minutes – hours</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-warning">
+          <strong>⚠️ Important:</strong> Full compensation does <strong>not</strong> mean the patient is cured.
+          Both values remain abnormal. You must identify the primary disorder by asking:
+          "Which value changes in the same direction as the pH?" — that component caused the disorder.
+        </div>
+
+        <div class="callout callout-info">
+          <strong>🔑 Quick Rule:</strong> The body compensates but <em>never overcorrects</em>.
+          If pH has normalized, look at whether it leans toward acidosis (&lt;7.40) or alkalosis (&gt;7.40)
+          to identify the primary side.
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           SECTION 4 — CLINICAL CAUSES
+      ══════════════════════════════════════════════════════════ -->
+      <section class="lec-section" id="clinical-causes">
+        <h2><span class="section-num">4</span> Clinical Causes — Vomiting, Diarrhea, Hyperventilation, Hypoventilation, and Substances</h2>
+
+        <div class="cause-grid">
+
+          <!-- Vomiting -->
+          <div class="cause-card alkalosis-cause">
+            <div class="cause-header">
+              <span class="cause-emoji">🤢</span>
+              <div>
+                <h3>Vomiting / NG Suctioning</h3>
+                <span class="disorder-tag tag-met-alk">→ Metabolic Alkalosis</span>
+              </div>
+            </div>
+            <p>
+              Gastric juice is rich in hydrochloric acid (HCl). When HCl is lost through vomiting or
+              nasogastric suctioning, the body loses H⁺ ions without losing HCO₃⁻ — the ratio tips toward alkalosis.
+            </p>
+            <div class="mechanism-box">
+              <strong>Mechanism:</strong> HCl loss → fewer H⁺ in blood → pH rises → HCO₃⁻ rises
+            </div>
+            <ul class="cause-list">
+              <li>Prolonged vomiting (pyloric stenosis, hyperemesis gravidarum, eating disorders)</li>
+              <li>Nasogastric tube suctioning post-surgery</li>
+              <li>Associated hypokalemia worsens alkalosis (K⁺ shifts out of cells, H⁺ shifts in)</li>
+            </ul>
+            <div class="abg-example">
+              pH ↑ &nbsp;|&nbsp; PaCO₂ normal–↑* &nbsp;|&nbsp; HCO₃⁻ ↑
+              <span class="abg-note">*lungs hypoventilate slightly to compensate</span>
+            </div>
+          </div>
+
+          <!-- Diarrhea -->
+          <div class="cause-card acidosis-cause">
+            <div class="cause-header">
+              <span class="cause-emoji">💧</span>
+              <div>
+                <h3>Diarrhea</h3>
+                <span class="disorder-tag tag-met-acid">→ Metabolic Acidosis</span>
+              </div>
+            </div>
+            <p>
+              Intestinal and pancreatic secretions below the stomach are rich in bicarbonate (HCO₃⁻).
+              Diarrhea causes large losses of HCO₃⁻, leaving excess H⁺ unchecked.
+            </p>
+            <div class="mechanism-box">
+              <strong>Mechanism:</strong> HCO₃⁻ lost in stool → less base to buffer H⁺ → pH falls
+            </div>
+            <ul class="cause-list">
+              <li>Acute infectious diarrhea (cholera, C. diff, viral gastroenteritis)</li>
+              <li>Inflammatory bowel disease flares</li>
+              <li>Ileostomy or colostomy with high output</li>
+              <li>Laxative abuse</li>
+            </ul>
+            <div class="abg-example">
+              pH ↓ &nbsp;|&nbsp; PaCO₂ normal–↓* &nbsp;|&nbsp; HCO₃⁻ ↓
+              <span class="abg-note">*lungs hyperventilate to compensate</span>
+            </div>
+          </div>
+
+          <!-- Hyperventilation -->
+          <div class="cause-card alkalosis-cause">
+            <div class="cause-header">
+              <span class="cause-emoji">😤</span>
+              <div>
+                <h3>Hyperventilation</h3>
+                <span class="disorder-tag tag-resp-alk">→ Respiratory Alkalosis</span>
+              </div>
+            </div>
+            <p>
+              Breathing too fast or too deeply blows off excess CO₂ faster than it is produced.
+              Less CO₂ means fewer H⁺ ions → pH rises.
+            </p>
+            <div class="mechanism-box">
+              <strong>Mechanism:</strong> ↑ Ventilation → CO₂ ↓ → H⁺ ↓ → pH ↑
+            </div>
+            <ul class="cause-list">
+              <li>Anxiety, panic attacks (most common cause)</li>
+              <li>Pain or fever</li>
+              <li>Pregnancy (progesterone stimulates breathing)</li>
+              <li>High altitude (hypoxia drives ventilation)</li>
+              <li>Sepsis (early — fever &amp; inflammatory mediators)</li>
+              <li>Over-ventilation on a mechanical ventilator</li>
+              <li>Salicylate (aspirin) overdose — direct stimulation of respiratory center</li>
+              <li>Pulmonary embolism or pulmonary edema (hypoxia triggers hyperventilation)</li>
+            </ul>
+            <div class="abg-example">
+              pH ↑ &nbsp;|&nbsp; PaCO₂ ↓ &nbsp;|&nbsp; HCO₃⁻ normal–↓*
+              <span class="abg-note">*kidneys excrete HCO₃⁻ to compensate (slow)</span>
+            </div>
+          </div>
+
+          <!-- Hypoventilation -->
+          <div class="cause-card acidosis-cause">
+            <div class="cause-header">
+              <span class="cause-emoji">😴</span>
+              <div>
+                <h3>Hypoventilation</h3>
+                <span class="disorder-tag tag-resp-acid">→ Respiratory Acidosis</span>
+              </div>
+            </div>
+            <p>
+              Breathing too slowly or too shallowly allows CO₂ to accumulate in the blood.
+              More CO₂ → more H⁺ → pH falls.
+            </p>
+            <div class="mechanism-box">
+              <strong>Mechanism:</strong> ↓ Ventilation → CO₂ ↑ → H⁺ ↑ → pH ↓
+            </div>
+            <ul class="cause-list">
+              <li><strong>Opioid overdose</strong> — CNS depression suppresses respiratory drive</li>
+              <li><strong>Sedative/benzodiazepine overdose</strong></li>
+              <li>COPD with CO₂ retention ("CO₂ retainer")</li>
+              <li>Obstructive sleep apnea</li>
+              <li>Neuromuscular disease (ALS, Guillain-Barré, myasthenia gravis)</li>
+              <li>Chest wall injury (flail chest, severe pain limiting breathing)</li>
+              <li>Stroke or brainstem injury affecting respiratory center</li>
+              <li>Obesity hypoventilation syndrome (Pickwickian syndrome)</li>
+            </ul>
+            <div class="abg-example">
+              pH ↓ &nbsp;|&nbsp; PaCO₂ ↑ &nbsp;|&nbsp; HCO₃⁻ normal–↑*
+              <span class="abg-note">*kidneys retain HCO₃⁻ to compensate (slow)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Substances Table -->
+        <h3 class="subsection-title" id="substances">Ingested / Administered Substances</h3>
+        <p>Many drugs and toxins directly disturb acid-base balance. Knowing these is high-yield for NCLEX and clinical practice.</p>
+
+        <div class="substance-tables">
+          <div class="substance-table-wrap">
+            <h4 class="sub-table-title acidosis-title">Substances Causing Acidosis</h4>
+            <table class="lec-table">
+              <thead>
+                <tr>
+                  <th>Substance</th>
+                  <th>Type</th>
+                  <th>Mechanism</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Opioids</strong> (morphine, heroin, fentanyl)</td>
+                  <td><span class="tag-resp-acid">Respiratory</span></td>
+                  <td>CNS depression → hypoventilation → CO₂ ↑</td>
+                </tr>
+                <tr>
+                  <td><strong>Benzodiazepines</strong> (diazepam, lorazepam)</td>
+                  <td><span class="tag-resp-acid">Respiratory</span></td>
+                  <td>CNS/respiratory depression → CO₂ ↑</td>
+                </tr>
+                <tr>
+                  <td><strong>Barbiturates</strong></td>
+                  <td><span class="tag-resp-acid">Respiratory</span></td>
+                  <td>CNS depression → hypoventilation → CO₂ ↑</td>
+                </tr>
+                <tr>
+                  <td><strong>Aspirin (salicylates)</strong></td>
+                  <td><span class="tag-met-acid">Metabolic</span></td>
+                  <td>Direct fixed acid load (salicylic acid); also causes early respiratory alkalosis</td>
+                </tr>
+                <tr>
+                  <td><strong>Methanol</strong> (wood alcohol)</td>
+                  <td><span class="tag-met-acid">Metabolic</span></td>
+                  <td>Metabolized to formic acid → high anion gap metabolic acidosis</td>
+                </tr>
+                <tr>
+                  <td><strong>Ethylene glycol</strong> (antifreeze)</td>
+                  <td><span class="tag-met-acid">Metabolic</span></td>
+                  <td>Metabolized to oxalic acid → high anion gap metabolic acidosis</td>
+                </tr>
+                <tr>
+                  <td><strong>Metformin</strong> (in renal failure)</td>
+                  <td><span class="tag-met-acid">Metabolic</span></td>
+                  <td>Lactic acidosis due to mitochondrial inhibition</td>
+                </tr>
+                <tr>
+                  <td><strong>Ammonium chloride</strong></td>
+                  <td><span class="tag-met-acid">Metabolic</span></td>
+                  <td>Direct H⁺ donor → metabolic acidosis (rarely used clinically)</td>
+                </tr>
+                <tr>
+                  <td><strong>Alcohol (chronic)</strong></td>
+                  <td><span class="tag-met-acid">Metabolic</span></td>
+                  <td>Ketoacidosis + lactic acidosis from impaired hepatic metabolism</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="substance-table-wrap">
+            <h4 class="sub-table-title alkalosis-title">Substances Causing Alkalosis</h4>
+            <table class="lec-table">
+              <thead>
+                <tr>
+                  <th>Substance</th>
+                  <th>Type</th>
+                  <th>Mechanism</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Antacids</strong> (sodium bicarbonate, calcium carbonate)</td>
+                  <td><span class="tag-met-alk">Metabolic</span></td>
+                  <td>Direct HCO₃⁻ load → metabolic alkalosis ("milk-alkali syndrome")</td>
+                </tr>
+                <tr>
+                  <td><strong>Loop diuretics</strong> (furosemide, bumetanide)</td>
+                  <td><span class="tag-met-alk">Metabolic</span></td>
+                  <td>Chloride &amp; K⁺ loss → contraction alkalosis + HCO₃⁻ retention</td>
+                </tr>
+                <tr>
+                  <td><strong>Thiazide diuretics</strong></td>
+                  <td><span class="tag-met-alk">Metabolic</span></td>
+                  <td>Similar to loop diuretics — volume contraction + H⁺ loss</td>
+                </tr>
+                <tr>
+                  <td><strong>Corticosteroids</strong> (high dose)</td>
+                  <td><span class="tag-met-alk">Metabolic</span></td>
+                  <td>Mineralocorticoid effect: Na⁺ retention, H⁺ &amp; K⁺ excretion</td>
+                </tr>
+                <tr>
+                  <td><strong>Aspirin (salicylates — early)</strong></td>
+                  <td><span class="tag-resp-alk">Respiratory</span></td>
+                  <td>Direct stimulation of medullary respiratory center → hyperventilation</td>
+                </tr>
+                <tr>
+                  <td><strong>Progesterone</strong> (pregnancy, medroxyprogesterone)</td>
+                  <td><span class="tag-resp-alk">Respiratory</span></td>
+                  <td>Stimulates respiratory center → chronic mild hyperventilation</td>
+                </tr>
+                <tr>
+                  <td><strong>Nicotine / Caffeine</strong> (mild)</td>
+                  <td><span class="tag-resp-alk">Respiratory</span></td>
+                  <td>CNS stimulation → slight increase in ventilation</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           SECTION 5 — CNS DEPRESSION IN ACIDOSIS
+      ══════════════════════════════════════════════════════════ -->
+      <section class="lec-section" id="cns-depression">
+        <h2><span class="section-num">5</span> CNS Depression in Acidosis</h2>
+
+        <p class="lead">
+          Acidosis — especially severe metabolic acidosis — has profound effects on the central nervous
+          system (CNS). Understanding these effects helps you recognize a critically ill patient before
+          the ABG result even comes back.
+        </p>
+
+        <div class="cns-grid">
+          <div class="cns-card">
+            <h3>🧠 Why Does Acidosis Depress the CNS?</h3>
+            <p>
+              Low pH disrupts neuronal membrane excitability and impairs neurotransmitter function.
+              H⁺ ions cross the blood-brain barrier and directly inhibit neuronal firing.
+              CO₂ crosses even more readily (lipid-soluble), making respiratory acidosis especially
+              potent in causing cerebral depression.
+            </p>
+            <ul>
+              <li>H⁺ and CO₂ diffuse into cerebrospinal fluid (CSF), lowering CSF pH</li>
+              <li>Reduced neuronal excitability → drowsiness, confusion, coma</li>
+              <li>Impaired cardiac conduction → arrhythmias, hypotension</li>
+              <li>Vasodilation of cerebral vessels → ↑ intracranial pressure (from CO₂)</li>
+            </ul>
+          </div>
+
+          <div class="cns-card">
+            <h3>📉 Clinical Progression of Acidosis</h3>
+            <div class="progression-steps">
+              <div class="prog-step">
+                <div class="prog-badge mild">Mild (pH 7.20–7.35)</div>
+                <p>Headache, restlessness, mild confusion, fatigue</p>
+              </div>
+              <div class="prog-step">
+                <div class="prog-badge moderate">Moderate (pH 7.10–7.20)</div>
+                <p>Lethargy, disorientation, nausea, deep Kussmaul breathing (metabolic)</p>
+              </div>
+              <div class="prog-step">
+                <div class="prog-badge severe">Severe (pH &lt; 7.10)</div>
+                <p>Stupor, coma, cardiac arrhythmias, hemodynamic instability</p>
+              </div>
+              <div class="prog-step">
+                <div class="prog-badge critical">Critical (pH &lt; 6.80)</div>
+                <p>Death — protein denaturation, irreversible cellular damage</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cns-specifics">
+          <h3>Respiratory Acidosis vs Metabolic Acidosis — CNS Differences</h3>
+          <div class="two-col-compare">
+            <div class="compare-item">
+              <h4>Respiratory Acidosis</h4>
+              <p>CO₂ is lipid-soluble and crosses the blood-brain barrier rapidly. Even moderate hypercapnia
+              (CO₂ 60–80 mmHg) causes significant CNS depression: somnolence, confusion, "CO₂ narcosis."
+              This is particularly relevant in COPD patients on supplemental oxygen — removing hypoxic drive
+              can cause further hypoventilation and worsening CO₂ retention.</p>
+              <ul>
+                <li><strong>CO₂ narcosis:</strong> CO₂ &gt; 70–80 mmHg → stupor, coma</li>
+                <li>Flapping tremor (asterixis) is a classic sign</li>
+                <li>Papilledema from cerebral vasodilation can occur in severe hypercapnia</li>
+              </ul>
+            </div>
+            <div class="compare-item">
+              <h4>Metabolic Acidosis</h4>
+              <p>H⁺ and organic acids (lactate, ketoacids) cause slower but progressive CNS dysfunction.
+              The body compensates by increasing ventilation (Kussmaul breathing) which can partially
+              protect the brain, but severe metabolic acidosis is still life-threatening.</p>
+              <ul>
+                <li>Kussmaul respirations: deep, rapid breathing — a compensatory sign</li>
+                <li>DKA: fruity breath from acetone (volatile ketone)</li>
+                <li>Uremic encephalopathy in renal failure — from accumulated toxins + acidosis</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <strong>⚠️ Nursing Priority:</strong> A patient with worsening acidosis (pH &lt; 7.20) who becomes increasingly
+          somnolent or confused is at risk for respiratory arrest — the CNS depression may blunt their
+          drive to breathe, creating a vicious cycle. <strong>Notify the provider immediately for any pH &lt; 7.25,
+          or at any pH if consciousness is declining. Airway management is the priority.</strong>
+          Prepare for potential intubation if the patient cannot protect their airway.
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           SECTION 6 — CLINICAL SCENARIOS
+      ══════════════════════════════════════════════════════════ -->
+      <section class="lec-section" id="scenarios">
+        <h2><span class="section-num">6</span> Clinical Scenarios</h2>
+        <p class="lead">Apply your knowledge to these real-world cases. Click "Reveal Analysis" to see the interpretation.</p>
+
+        <div class="scenario-list">
+
+          <div class="scenario-card">
+            <div class="scenario-header">
+              <span class="scenario-num">Case 1</span>
+              <h3>The Diabetic Patient with Deep Breathing</h3>
+            </div>
+            <div class="scenario-body">
+              <p><strong>History:</strong> 22-year-old with Type 1 Diabetes presents with 3 days of polyuria,
+              polydipsia, nausea, and vomiting. You notice she is breathing deeply and rapidly.</p>
+              <div class="abg-values">
+                <span>pH: <strong>7.22</strong></span>
+                <span>PaCO₂: <strong>18</strong> mmHg</span>
+                <span>HCO₃⁻: <strong>7</strong> mEq/L</span>
+              </div>
+              <button class="reveal-btn" aria-expanded="false" data-target="s1-answer">Reveal Analysis</button>
+              <div class="scenario-answer" aria-hidden="true" id="s1-answer">
+                <p><strong>Disorder:</strong> Metabolic Acidosis, Partially Compensated</p>
+                <p><strong>Primary problem:</strong> HCO₃⁻ critically low (7) → pH ↓. Caused by ketoacid accumulation (DKA) — these are <em>fixed acids</em> that the lungs cannot eliminate.</p>
+                <p><strong>Compensation:</strong> PaCO₂ 18 (↓) — she is hyperventilating (Kussmaul breathing) to blow off CO₂ and raise pH. The lungs are doing the only thing they can: reducing the volatile acid component. But they cannot touch the ketoacid load.</p>
+                <p><strong>Lung limitation:</strong> Despite heroic respiratory compensation, pH is still 7.22 because fixed ketoacids remain. Only insulin + fluids (stopping ketogenesis) and kidney excretion of ketoacids will resolve the metabolic acidosis.</p>
+                <p><strong>Action:</strong> IV insulin, IV fluids, electrolyte monitoring. Airway monitoring — if she tires out, she will stop compensating and crash rapidly.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="scenario-card">
+            <div class="scenario-header">
+              <span class="scenario-num">Case 2</span>
+              <h3>Post-Op Patient with Altered Mental Status</h3>
+            </div>
+            <div class="scenario-body">
+              <p><strong>History:</strong> 68-year-old post-abdominal surgery, received IV morphine PCA.
+              Nurse finds patient extremely somnolent, RR 6, SpO₂ 88%.</p>
+              <div class="abg-values">
+                <span>pH: <strong>7.18</strong></span>
+                <span>PaCO₂: <strong>72</strong> mmHg</span>
+                <span>HCO₃⁻: <strong>26</strong> mEq/L</span>
+              </div>
+              <button class="reveal-btn" aria-expanded="false" data-target="s2-answer">Reveal Analysis</button>
+              <div class="scenario-answer" aria-hidden="true" id="s2-answer">
+                <p><strong>Disorder:</strong> Respiratory Acidosis, Uncompensated (Acute)</p>
+                <p><strong>Primary problem:</strong> CO₂ 72 (↑↑) → pH critically low. Opioid-induced CNS depression has suppressed the respiratory drive. CO₂ is a volatile acid retained because the lungs aren't ventilating adequately.</p>
+                <p><strong>Why uncompensated?</strong> HCO₃⁻ is still 26 (normal) — the kidneys haven't had time to respond (this is acute, minutes to hours).</p>
+                <p><strong>CNS depression:</strong> CO₂ narcosis — CO₂ 72 has crossed the BBB and is directly suppressing CNS. The somnolence makes hypoventilation worse (vicious cycle).</p>
+                <p><strong>Action:</strong> Naloxone (opioid reversal), stimulate breathing, prepare for possible bag-mask ventilation or intubation. Stop PCA.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="scenario-card">
+            <div class="scenario-header">
+              <span class="scenario-num">Case 3</span>
+              <h3>Post-Op Patient with NG Tube</h3>
+            </div>
+            <div class="scenario-body">
+              <p><strong>History:</strong> 55-year-old post-gastrectomy on continuous NG suction for 4 days.
+              Complains of muscle cramps and tingling.</p>
+              <div class="abg-values">
+                <span>pH: <strong>7.52</strong></span>
+                <span>PaCO₂: <strong>48</strong> mmHg</span>
+                <span>HCO₃⁻: <strong>38</strong> mEq/L</span>
+              </div>
+              <button class="reveal-btn" aria-expanded="false" data-target="s3-answer">Reveal Analysis</button>
+              <div class="scenario-answer" aria-hidden="true" id="s3-answer">
+                <p><strong>Disorder:</strong> Metabolic Alkalosis, Partially Compensated</p>
+                <p><strong>Primary problem:</strong> HCO₃⁻ 38 (↑↑) → pH ↑. 4 days of NG suctioning removed massive amounts of HCl from the stomach — loss of the fixed acid H⁺ leaves the body relatively alkalotic.</p>
+                <p><strong>Compensation:</strong> PaCO₂ 48 (↑) — the lungs are hypoventilating slightly to retain CO₂ (volatile acid) to counterbalance the alkalosis. However, respiratory compensation for alkalosis is limited because hypoventilation risks dangerous hypoxemia.</p>
+                <p><strong>Symptoms:</strong> Muscle cramps/tetany from hypocalcemia — alkalosis causes calcium to bind more to albumin, reducing ionized Ca²⁺.</p>
+                <p><strong>Action:</strong> Replace K⁺ and Cl⁻ (NS or KCl). Consider stopping suctioning or switching to intermittent. Monitor calcium.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="scenario-card">
+            <div class="scenario-header">
+              <span class="scenario-num">Case 4</span>
+              <h3>Anxious Patient in the ED</h3>
+            </div>
+            <div class="scenario-body">
+              <p><strong>History:</strong> 24-year-old brought to ED after a panic attack. Breathing rapidly,
+              complains of tingling in fingers and toes, lips feel numb.</p>
+              <div class="abg-values">
+                <span>pH: <strong>7.58</strong></span>
+                <span>PaCO₂: <strong>22</strong> mmHg</span>
+                <span>HCO₃⁻: <strong>20</strong> mEq/L</span>
+              </div>
+              <button class="reveal-btn" aria-expanded="false" data-target="s4-answer">Reveal Analysis</button>
+              <div class="scenario-answer" aria-hidden="true" id="s4-answer">
+                <p><strong>Disorder:</strong> Respiratory Alkalosis, Partially Compensated</p>
+                <p><strong>Primary problem:</strong> CO₂ 22 (↓↓) → pH ↑. Anxiety-driven hyperventilation blew off CO₂ far below normal — the only volatile acid is now too low.</p>
+                <p><strong>Compensation:</strong> HCO₃⁻ 20 (↓ slightly) — kidneys have started excreting bicarbonate to lower pH. The fact that it's only mildly reduced suggests this is relatively acute.</p>
+                <p><strong>Symptoms:</strong> Perioral and acral tingling — alkalemia increases albumin binding of calcium, reducing free ionized Ca²⁺ (functional hypocalcemia), which raises neuromuscular excitability. This is the same mechanism seen in true hypocalcemia.</p>
+                <p><strong>Action:</strong> Reassurance and breathing retraining are first-line. Controlled slow breathing (diaphragmatic, or breathing into cupped hands) helps retain CO₂; paper bags are no longer recommended due to hypoxia risk. Treat the underlying anxiety/panic disorder.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="scenario-card">
+            <div class="scenario-header">
+              <span class="scenario-num">Case 5</span>
+              <h3>COPD Patient on Oxygen</h3>
+            </div>
+            <div class="scenario-body">
+              <p><strong>History:</strong> 72-year-old with severe COPD, lives at home on 1–2 L O₂.
+              Admitted for increasing shortness of breath. Alert but dyspneic.</p>
+              <div class="abg-values">
+                <span>pH: <strong>7.36</strong></span>
+                <span>PaCO₂: <strong>62</strong> mmHg</span>
+                <span>HCO₃⁻: <strong>34</strong> mEq/L</span>
+              </div>
+              <button class="reveal-btn" aria-expanded="false" data-target="s5-answer">Reveal Analysis</button>
+              <div class="scenario-answer" aria-hidden="true" id="s5-answer">
+                <p><strong>Disorder:</strong> Respiratory Acidosis, Fully Compensated (Chronic)</p>
+                <p><strong>Primary problem:</strong> CO₂ 62 (↑) from chronic COPD-related hypoventilation.</p>
+                <p><strong>Compensation:</strong> HCO₃⁻ 34 (↑↑) — the kidneys have had time (days to weeks) to retain large amounts of bicarbonate, pulling the pH to 7.36 (within normal range, but low-normal indicating the acidotic side).</p>
+                <p><strong>Key insight:</strong> This patient's "normal" CO₂ is not 40 — it's 62. Do not aggressively correct CO₂ too fast. This patient relies partly on a hypoxic drive to breathe. High-flow O₂ can remove that drive and worsen CO₂ retention.</p>
+                <p><strong>Action:</strong> Controlled O₂ (titrate to SpO₂ 88–92%), bronchodilators, treat exacerbation. Avoid high-dose O₂.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════
+           SECTION 7 — QUIZ
+      ══════════════════════════════════════════════════════════ -->
+      <section class="lec-section" id="quiz">
+        <h2><span class="section-num">7</span> Knowledge Check Quiz</h2>
+        <p class="lead">Test your understanding. Select an answer, then reveal the explanation.</p>
+
+        <div class="quiz-list">
+
+          <div class="quiz-item" data-correct="b">
+            <p class="quiz-question">1. A patient with DKA has a PaCO₂ of 16 mmHg and pH 7.24. Why can't the lungs fully correct the pH back to normal?</p>
+            <div class="quiz-options">
+              <label><input type="radio" name="q1" value="a"/> The lungs have already compensated fully — this ABG is fully compensated.</label>
+              <label><input type="radio" name="q1" value="b"/> Ketoacids are <em>fixed acids</em> that the lungs cannot eliminate; only the kidneys can excrete them.</label>
+              <label><input type="radio" name="q1" value="c"/> The bicarbonate is too high for the lungs to compensate.</label>
+              <label><input type="radio" name="q1" value="d"/> The lungs can only respond to metabolic alkalosis, not metabolic acidosis.</label>
+            </div>
+            <button class="reveal-btn" aria-expanded="false" data-target="q1-exp">Reveal Explanation</button>
+            <div class="quiz-explanation" aria-hidden="true" id="q1-exp">
+              <strong>✅ Correct Answer: B</strong><br/>
+              Ketoacids (acetoacetic acid, beta-hydroxybutyric acid) are fixed, non-volatile acids. The lungs can only reduce CO₂ (a volatile acid), which temporarily raises pH but cannot remove the underlying ketoacid load. Treatment with insulin stops ketoacid production, and the kidneys excrete what remains.
+            </div>
+          </div>
+
+          <div class="quiz-item" data-correct="c">
+            <p class="quiz-question">2. A patient has pH 7.50, PaCO₂ 50, HCO₃⁻ 38. What is the primary disorder and what caused the elevated HCO₃⁻?</p>
+            <div class="quiz-options">
+              <label><input type="radio" name="q2" value="a"/> Respiratory alkalosis; the kidneys are excreting acid.</label>
+              <label><input type="radio" name="q2" value="b"/> Respiratory acidosis; the kidneys are retaining acid.</label>
+              <label><input type="radio" name="q2" value="c"/> Metabolic alkalosis; HCO₃⁻ rose first (primary), CO₂ ↑ is compensation.</label>
+              <label><input type="radio" name="q2" value="d"/> Metabolic acidosis; HCO₃⁻ is being used up buffering acid.</label>
+            </div>
+            <button class="reveal-btn" aria-expanded="false" data-target="q2-exp">Reveal Explanation</button>
+            <div class="quiz-explanation" aria-hidden="true" id="q2-exp">
+              <strong>✅ Correct Answer: C</strong><br/>
+              pH is high (alkalosis). HCO₃⁻ is high — matching the pH direction (ROME = Equal for Metabolic). Primary disorder = Metabolic Alkalosis. The lungs compensate by retaining CO₂ (hypoventilation), which is why PaCO₂ is elevated. Common cause: prolonged vomiting or NG suctioning.
+            </div>
+          </div>
+
+          <div class="quiz-item" data-correct="a">
+            <p class="quiz-question">3. Which of the following is a <em>volatile</em> acid?</p>
+            <div class="quiz-options">
+              <label><input type="radio" name="q3" value="a"/> Carbonic acid (H₂CO₃) derived from CO₂</label>
+              <label><input type="radio" name="q3" value="b"/> Lactic acid</label>
+              <label><input type="radio" name="q3" value="c"/> Phosphoric acid</label>
+              <label><input type="radio" name="q3" value="d"/> Beta-hydroxybutyric acid</label>
+            </div>
+            <button class="reveal-btn" aria-expanded="false" data-target="q3-exp">Reveal Explanation</button>
+            <div class="quiz-explanation" aria-hidden="true" id="q3-exp">
+              <strong>✅ Correct Answer: A</strong><br/>
+              CO₂ dissolves in water to form carbonic acid (H₂CO₃), but this reaction is reversible — the CO₂ can be exhaled as a gas. This makes it a <em>volatile</em> acid — it can be eliminated by the lungs. Lactic acid, phosphoric acid, and beta-hydroxybutyric acid are all <em>fixed</em> (non-volatile) acids that require renal excretion.
+            </div>
+          </div>
+
+          <div class="quiz-item" data-correct="d">
+            <p class="quiz-question">4. A patient on a diuretic develops pH 7.51, PaCO₂ 46, HCO₃⁻ 36. What is the likely mechanism?</p>
+            <div class="quiz-options">
+              <label><input type="radio" name="q4" value="a"/> The diuretic is causing hyperventilation, blowing off CO₂.</label>
+              <label><input type="radio" name="q4" value="b"/> The kidneys are generating excess CO₂ to compensate.</label>
+              <label><input type="radio" name="q4" value="c"/> Diarrhea has caused bicarbonate loss, leading to alkalosis.</label>
+              <label><input type="radio" name="q4" value="d"/> Loop/thiazide diuretics cause chloride and potassium loss, leading to contraction alkalosis and increased HCO₃⁻ reabsorption.</label>
+            </div>
+            <button class="reveal-btn" aria-expanded="false" data-target="q4-exp">Reveal Explanation</button>
+            <div class="quiz-explanation" aria-hidden="true" id="q4-exp">
+              <strong>✅ Correct Answer: D</strong><br/>
+              Loop and thiazide diuretics cause loss of Na⁺, Cl⁻, and K⁺. Volume contraction triggers aldosterone, which promotes H⁺ excretion and HCO₃⁻ reabsorption. Hypokalemia also worsens alkalosis (K⁺ exits cells, H⁺ enters to maintain electroneutrality). This is "contraction alkalosis" — a metabolic alkalosis.
+            </div>
+          </div>
+
+          <div class="quiz-item" data-correct="b">
+            <p class="quiz-question">5. Why is CNS depression particularly severe in respiratory acidosis compared with metabolic acidosis of similar pH?</p>
+            <div class="quiz-options">
+              <label><input type="radio" name="q5" value="a"/> Metabolic acidosis causes more vasodilation in the brain.</label>
+              <label><input type="radio" name="q5" value="b"/> CO₂ is lipid-soluble and crosses the blood-brain barrier rapidly, directly acidifying the CSF and suppressing neurons.</label>
+              <label><input type="radio" name="q5" value="c"/> Respiratory acidosis always has a lower pH than metabolic acidosis.</label>
+              <label><input type="radio" name="q5" value="d"/> The kidneys compensate faster in metabolic acidosis, protecting the brain.</label>
+            </div>
+            <button class="reveal-btn" aria-expanded="false" data-target="q5-exp">Reveal Explanation</button>
+            <div class="quiz-explanation" aria-hidden="true" id="q5-exp">
+              <strong>✅ Correct Answer: B</strong><br/>
+              CO₂ is a small, lipid-soluble molecule that diffuses freely across the blood-brain barrier and into cerebrospinal fluid (CSF). Once in the CSF, it converts to H⁺ which directly inhibits neuronal activity. Fixed acids from metabolic acidosis are larger, charged molecules that cross the BBB slowly, so CNS effects are more delayed. This is why CO₂ narcosis can occur rapidly.
+            </div>
+          </div>
+
+          <div class="quiz-item" data-correct="c">
+            <p class="quiz-question">6. A patient with severe diarrhea for 3 days has pH 7.28, PaCO₂ 28, HCO₃⁻ 12. The respiratory rate is 28/min. What is happening physiologically?</p>
+            <div class="quiz-options">
+              <label><input type="radio" name="q6" value="a"/> Respiratory alkalosis is the primary problem; kidneys are compensating.</label>
+              <label><input type="radio" name="q6" value="b"/> The low CO₂ is causing the acidosis.</label>
+              <label><input type="radio" name="q6" value="c"/> Metabolic acidosis from HCO₃⁻ loss; lungs are hyperventilating to reduce CO₂ and compensate.</label>
+              <label><input type="radio" name="q6" value="d"/> This ABG is fully compensated — pH is within normal range.</label>
+            </div>
+            <button class="reveal-btn" aria-expanded="false" data-target="q6-exp">Reveal Explanation</button>
+            <div class="quiz-explanation" aria-hidden="true" id="q6-exp">
+              <strong>✅ Correct Answer: C</strong><br/>
+              Diarrhea causes loss of HCO₃⁻ (intestinal/pancreatic secretions are bicarbonate-rich). HCO₃⁻ 12 is critically low → pH falls (metabolic acidosis). The lungs respond by hyperventilating (RR 28) to blow off CO₂, reducing the volatile acid component to partially compensate. pH 7.28 is still acidotic — partial compensation only. The kidneys need time to regenerate HCO₃⁻.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Bottom nav -->
+      <div class="bottom-nav">
+        <a href={`${base}reference`} class="btn btn-outline">← Quick Reference</a>
+        <a href={`${base}interpreter`} class="btn btn-primary">Practice ABG Interpreter →</a>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Reveal buttons for scenarios and quiz explanations
+  document.querySelectorAll<HTMLButtonElement>('.reveal-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      if (!targetId) return;
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      const isHidden = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+      target.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+      target.classList.toggle('visible', isHidden);
+      const isQuiz = !!btn.closest('.quiz-item');
+      btn.textContent = isHidden
+        ? (isQuiz ? 'Hide Explanation' : 'Hide')
+        : (isQuiz ? 'Reveal Explanation' : 'Reveal Analysis');
+    });
+  });
+
+  // Quiz answer highlighting
+  document.querySelectorAll<HTMLDivElement>('.quiz-item').forEach(item => {
+    const correct = item.getAttribute('data-correct');
+    item.querySelectorAll<HTMLInputElement>('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        item.querySelectorAll('label').forEach(label => {
+          label.classList.remove('correct-answer', 'wrong-answer');
+        });
+        const selectedLabel = radio.closest('label');
+        if (selectedLabel) {
+          selectedLabel.classList.add(radio.value === correct ? 'correct-answer' : 'wrong-answer');
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .lecture-page {
+    padding: 2rem 0 4rem;
+  }
+
+  /* ── Page Header ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--color-primary-light);
+  }
+
+  .page-header h1 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    color: var(--color-primary-dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.7;
+  }
+
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .toc strong {
+    color: var(--color-text-muted);
+    margin-right: 0.25rem;
+  }
+
+  .toc a {
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+
+  .toc a:hover {
+    background: var(--color-primary);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* ── Section ── */
+  .lec-section {
+    margin-bottom: 4rem;
+    padding-top: 1rem;
+  }
+
+  .lec-section h2 {
+    font-size: 1.6rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 3px solid var(--color-primary-light);
+    padding-bottom: 0.5rem;
+  }
+
+  .section-num {
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .lead {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+    max-width: 820px;
+  }
+
+  .subsection-title {
+    font-size: 1.2rem;
+    color: var(--color-primary-dark);
+    margin: 2rem 0 0.75rem;
+  }
+
+  /* ── Two-col cards ── */
+  .two-col-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .type-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border-top: 4px solid transparent;
+  }
+
+  .volatile-acid  { border-color: #e76f51; }
+  .fixed-acid     { border-color: #c0392b; }
+  .volatile-base  { border-color: #2a9d8f; }
+  .fixed-base     { border-color: #5e35b1; }
+
+  .type-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .type-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .type-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .type-badge.volatile { background: #fff3e0; color: #e65100; }
+  .type-badge.fixed    { background: #fde8e8; color: #c0392b; }
+
+  .type-card p {
+    color: var(--color-text-muted);
+    font-size: 0.93rem;
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+
+  .type-list {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    padding-left: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .equation-box {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-family: monospace;
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .eq-caption {
+    font-family: inherit;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin-top: 0.4rem;
+  }
+
+  .key-point {
+    background: #fffde7;
+    border-left: 3px solid var(--color-warning);
+    padding: 0.6rem 0.85rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-top: 0.75rem;
+  }
+
+  .key-point.warning {
+    background: #fff3f3;
+    border-left-color: var(--color-danger, #e63946);
+  }
+
+  .produced-day {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    background: #f5f5f5;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius);
+  }
+
+  /* ── Comparison table ── */
+  .comparison-table-wrap {
+    overflow-x: auto;
+    margin-top: 0.5rem;
+  }
+
+  .lec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .lec-table th,
+  .lec-table td {
+    padding: 0.6rem 0.85rem;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .lec-table thead th {
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .lec-table tbody tr:nth-child(even) { background: #f9f9f9; }
+  .lec-table tbody tr:hover { background: var(--color-primary-light); }
+
+  .col-va { color: #e65100; }
+  .col-fa { color: #c0392b; }
+  .col-vb { color: #007a73; }
+  .col-fb { color: #5e35b1; }
+
+  /* ── Organ compare ── */
+  .organ-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .organ-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+
+  .lung-card   { border-top: 4px solid #e76f51; }
+  .kidney-card { border-top: 4px solid #5e35b1; }
+
+  .organ-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+  .organ-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .organ-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .can-do, .cannot-do {
+    margin-bottom: 1rem;
+  }
+
+  .can-do h4, .cannot-do h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .can-do ul, .cannot-do ul {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    padding-left: 1.25rem;
+    line-height: 1.7;
+  }
+
+  .organ-abg {
+    margin-top: 0.75rem;
+    font-size: 0.88rem;
+  }
+
+  .badge-co2 {
+    background: #fff3e0; color: #e65100;
+    padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 700;
+  }
+
+  .badge-hco3 {
+    background: #f0ebff; color: #5e35b1;
+    padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 700;
+  }
+
+  /* ── Callouts ── */
+  .callout {
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-size: 0.93rem;
+    line-height: 1.65;
+    border-left: 4px solid transparent;
+  }
+
+  .callout-info    { background: #e8f4f8; border-color: #1a6b8a; }
+  .callout-warning { background: #fff8e1; border-color: var(--color-warning, #f39c12); }
+
+  /* ── Compensation stages ── */
+  .comp-stages {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .comp-stage {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+    border-top: 4px solid transparent;
+  }
+
+  .uncompensated { border-color: #e63946; }
+  .partial       { border-color: #f4a261; }
+  .full          { border-color: #2a9d8f; }
+
+  .comp-stage-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .comp-stage h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+
+  .comp-stage p {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+
+  .comp-example {
+    background: #f8f9fa;
+    border-radius: 0.4rem;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+
+  .comp-rules {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+
+  /* ── Clinical Causes ── */
+  .cause-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .cause-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.35rem;
+    box-shadow: var(--shadow);
+    border-left: 5px solid transparent;
+  }
+
+  .acidosis-cause  { border-color: #e63946; }
+  .alkalosis-cause { border-color: #2a9d8f; }
+
+  .cause-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cause-emoji { font-size: 2rem; flex-shrink: 0; }
+
+  .cause-header h3 { font-size: 1rem; margin: 0 0 0.3rem; }
+
+  .disorder-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+  }
+
+  .tag-met-acid  { background: #fde8e8; color: #c0392b; }
+  .tag-met-alk   { background: #e8f4ee; color: #1d7a4b; }
+  .tag-resp-acid { background: #fff3e0; color: #e65100; }
+  .tag-resp-alk  { background: #e8f0fe; color: #1a5cbc; }
+
+  .cause-card > p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+
+  .mechanism-box {
+    background: #f8f9fa;
+    border-left: 3px solid #ccc;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.88rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-bottom: 0.75rem;
+  }
+
+  .cause-list {
+    font-size: 0.87rem;
+    color: var(--color-text-muted);
+    padding-left: 1.2rem;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+
+  .abg-example {
+    background: #f0f4f8;
+    border-radius: var(--radius);
+    padding: 0.5rem 0.85rem;
+    font-size: 0.85rem;
+    font-family: monospace;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+  }
+
+  .abg-note {
+    font-family: inherit;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    flex: 1 1 100%;
+  }
+
+  /* ── Substance tables ── */
+  .substance-tables {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .substance-table-wrap { overflow-x: auto; }
+
+  .sub-table-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .acidosis-title  { background: #fde8e8; color: #c0392b; }
+  .alkalosis-title { background: #e8f4ee; color: #1d7a4b; }
+
+  /* ── CNS section ── */
+  .cns-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cns-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.35rem;
+    box-shadow: var(--shadow);
+  }
+
+  .cns-card h3 { font-size: 1rem; margin-bottom: 0.75rem; }
+
+  .cns-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+
+  .cns-card ul {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    padding-left: 1.2rem;
+    line-height: 1.7;
+  }
+
+  .progression-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .prog-step { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.88rem; }
+
+  .prog-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  .prog-badge.mild     { background: #fff8e1; color: #f39c12; }
+  .prog-badge.moderate { background: #fff3e0; color: #e65100; }
+  .prog-badge.severe   { background: #fde8e8; color: #c0392b; }
+  .prog-badge.critical { background: #1a0000; color: #ff8a8a; }
+
+  .prog-step p { color: var(--color-text-muted); margin: 0; line-height: 1.5; }
+
+  .cns-specifics {
+    margin-top: 1.5rem;
+  }
+
+  .two-col-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .compare-item {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+
+  .compare-item h4 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--color-primary-dark); }
+
+  .compare-item p {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+
+  .compare-item ul {
+    font-size: 0.87rem;
+    color: var(--color-text-muted);
+    padding-left: 1.2rem;
+    line-height: 1.7;
+  }
+
+  /* ── Scenarios ── */
+  .scenario-list { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .scenario-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .scenario-header {
+    background: var(--color-primary-dark);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .scenario-num {
+    background: rgba(255,255,255,0.2);
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .scenario-header h3 { color: #fff; font-size: 1.05rem; margin: 0; }
+
+  .scenario-body {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .scenario-body > p {
+    font-size: 0.93rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+
+  .abg-values {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    background: #f0f4f8;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .abg-values span { font-family: monospace; }
+
+  .reveal-btn {
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background 0.15s;
+    margin-bottom: 0.75rem;
+  }
+
+  .reveal-btn:hover { background: var(--color-primary-dark); }
+
+  .scenario-answer,
+  .quiz-explanation {
+    display: none;
+    background: #f0f4f8;
+    border-left: 4px solid var(--color-primary);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .scenario-answer[aria-hidden="false"],
+  .scenario-answer.visible,
+  .quiz-explanation[aria-hidden="false"],
+  .quiz-explanation.visible {
+    display: block;
+  }
+
+  .scenario-answer p,
+  .quiz-explanation p {
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Quiz ── */
+  .quiz-list { display: flex; flex-direction: column; gap: 2rem; }
+
+  .quiz-item {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+
+  .quiz-question {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-options label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.15s;
+    line-height: 1.5;
+  }
+
+  .quiz-options label:hover { background: var(--color-primary-light); }
+  .quiz-options input { flex-shrink: 0; margin-top: 0.2rem; }
+
+  label.correct-answer {
+    background: #e8f4ee !important;
+    border-color: #2a9d8f;
+    color: #1d7a4b;
+    font-weight: 600;
+  }
+
+  label.wrong-answer {
+    background: #fde8e8 !important;
+    border-color: #e63946;
+    color: #c0392b;
+  }
+
+  /* ── Bottom nav ── */
+  .bottom-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--color-primary-light);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-decoration: none;
+  }
+
+  .btn-outline:hover {
+    background: var(--color-primary);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 800px) {
+    .two-col-cards,
+    .organ-compare,
+    .cause-grid,
+    .cns-grid,
+    .two-col-compare {
+      grid-template-columns: 1fr;
+    }
+
+    .comp-stages {
+      grid-template-columns: 1fr;
+    }
+
+    .scenario-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .bottom-nav {
+      flex-direction: column;
+    }
+  }
+</style>
